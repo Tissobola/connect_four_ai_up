@@ -105,6 +105,3 @@ while (board.end == False):
     board.move(collumn, (turn % 2) + 1)
     turn += 1
     collumn = 0
-    
-    
-# 4 3 2 2 3 1 2 1 5 1 1
