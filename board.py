@@ -63,11 +63,22 @@ class Board:
             else:
                 count = 0
 
-        # Check diagonal
+        # Check diagonal up-left-to-right
         count = 0
         for i in range(-3, 4):
             if 0 <= row + i < self.rows and 0 <= col + i < self.cols:
                 if self.board[row + i][col + i] == token:
+                    count += 1
+                    if count == 4:
+                        return True
+                else:
+                    count = 0
+        
+        # Check diagonal down-left-to-right
+        count = 0
+        for i in range(-3, 4):
+            if 0 <= row - i < self.rows and 0 <= col + i < self.cols:
+                if self.board[row - i][col + i] == token:
                     count += 1
                     if count == 4:
                         return True
@@ -94,3 +105,6 @@ while (board.end == False):
     board.move(collumn, (turn % 2) + 1)
     turn += 1
     collumn = 0
+    
+    
+# 4 3 2 2 3 1 2 1 5 1 1
