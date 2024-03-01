@@ -47,27 +47,24 @@ class Board_Interface:
 
 if __name__ == "__main__":
     pygame.init()
-    game = ConnectFour(6, 7, 100)
+    game = Board_Interface(6, 7, 100, board)
     game.run_game()
 
 
-class CircleO:
+class Circle:
     def __init__(self, square_size):
         self.radius = int(square_size / 2 - 5)
-        self.YELLOW = (255, 255, 0)
-
-    def draw(self, screen, column, row, square_size):
+    
+    def draw(self, screen, column, row, square_size, symbol):
         x = int(column * square_size + square_size // 2)
         y = int(row * square_size + square_size // 2 + square_size)
-        pygame.draw.circle(screen, self.YELLOW, (x, y), self.radius)
+        if symbol == 'X': 
+            pygame.draw.circle(screen, (255, 0, 0), (x, y), self.radius)
+        elif symbol == 'O':
+            pygame.draw.circle(screen,(255, 255, 0), (x, y), self.radius)
 
+game_board = board.Board()
 
-class CircleX:
-    def __init__(self, square_size):
-        self.radius = int(square_size / 2 - 5)
-        self.RED = (255, 0, 0)
+game = Board_Interface(6, 7,100, game_board)
 
-    def draw(self, screen, column, row, square_size):
-        x = int(column * square_size + square_size // 2)
-        y = int(row * square_size + square_size // 2 + square_size)
-        pygame.draw.circle(screen, self.RED, (x, y), self.radius)
+game.run_game()
