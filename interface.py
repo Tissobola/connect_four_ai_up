@@ -51,7 +51,7 @@ if __name__ == "__main__":
     game.run_game()
 
 
-class Circle:
+class Piece:
     def __init__(self, square_size):
         self.radius = int(square_size / 2 - 5)
     
