@@ -40,3 +40,25 @@ if __name__ == "__main__":
     pygame.init()
     game = ConnectFour(6, 7, 100)
     game.run_game()
+
+
+class CircleO:
+    def __init__(self, square_size):
+        self.radius = int(square_size / 2 - 5)
+        self.YELLOW = (255, 255, 0)
+
+    def draw(self, screen, column, row, square_size):
+        x = int(column * square_size + square_size // 2)
+        y = int(row * square_size + square_size // 2 + square_size)
+        pygame.draw.circle(screen, self.YELLOW, (x, y), self.radius)
+
+
+class CircleX:
+    def __init__(self, square_size):
+        self.radius = int(square_size / 2 - 5)
+        self.RED = (255, 0, 0)
+
+    def draw(self, screen, column, row, square_size):
+        x = int(column * square_size + square_size // 2)
+        y = int(row * square_size + square_size // 2 + square_size)
+        pygame.draw.circle(screen, self.RED, (x, y), self.radius)
