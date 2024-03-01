@@ -93,6 +93,28 @@ class Board_Interface:
                     
             self.screen.fill(self.colors['BACKGROUND'])
         pygame.quit()
-        
-    
 
+
+if __name__ == "__main__":
+    pygame.init()
+    game = Board_Interface(6, 7, 100, board)
+    game.run_game()
+
+
+class Piece:
+    def __init__(self, square_size):
+        self.radius = int(square_size / 2 - 5)
+    
+    def draw(self, screen, column, row, square_size, symbol):
+        x = int(column * square_size + square_size // 2)
+        y = int(row * square_size + square_size // 2 + square_size)
+        if symbol == 'X': 
+            pygame.draw.circle(screen, (255, 0, 0), (x, y), self.radius)
+        elif symbol == 'O':
+            pygame.draw.circle(screen,(255, 255, 0), (x, y), self.radius)
+
+game_board = board.Board()
+
+game = Board_Interface(6, 7,100, game_board)
+
+game.run_game()
