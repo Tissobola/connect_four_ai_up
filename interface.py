@@ -1,8 +1,9 @@
 import pygame
 import sys
+from board import *
 
-class ConnectFour:
-    def __init__(self, row_count, column_count, square_size):
+class Board_Interface:
+    def __init__(self, row_count, column_count, square_size, board):
         self.row_count = row_count
         self.column_count = column_count
         self.square_size = square_size
@@ -13,16 +14,24 @@ class ConnectFour:
         self.BLACK = (0, 0, 0)
         self.RED = (255, 0, 0)
         self.YELLOW = (255, 255, 0)
+        self.WHITE = (255,255,255)
         self.BACKGROUND = (230, 191, 131)
-        self.board = [[0] * column_count for _ in range(row_count)]
+        self.GRILL = (193, 154, 107)
+        self.game_board = board
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("CONNECT FOUR")
 
     def draw_board(self):
-        for i in range(self.column_count):
-            for j in range(self.row_count):
-                pygame.draw.circle(self.screen, self.BLACK, (i * self.square_size + self.square_size // 2,
-                                                              j * self.square_size + self.square_size // 2 + self.square_size), self.radius)
+        for i in range(self.game_board.rows):
+            for j in range(self.game_board.cols):
+                if self.game_board.board[i][j] == '.':
+                    pygame.draw.circle(self.screen, self.WHITE, (i * self.square_size + self.square_size // 2, (j + 1) * self.square_size + self.square_size // 2), self.radius)
+                if self.game_board.board[i][j] == 'X':
+                    pygame.draw.circle(self.screen, self.RED, (i * self.square_size + self.square_size // 2, (j + 1) * self.square_size + self.square_size // 2), self.radius)
+                    
+                #drawingboard 
+                #pygame.draw.rect(self.screen, self.GRILL, (i * self.square_size, (j + 1) * self.square_size, self.square_size, self.square_size), 3)
+                
         pygame.display.update()
 
     def run_game(self):
