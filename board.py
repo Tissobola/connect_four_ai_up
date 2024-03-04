@@ -28,10 +28,7 @@ class Board:
             self.board.append(aux.copy())
 
     def move(self, collumn, player):
-        if player == 1:
-            self.addToCollumn(collumn, self.p1Symbol)
-        elif player == 2:
-            self.addToCollumn(collumn, self.p2Symbol)
+            self.addToCollumn(collumn, self.player(player))
             
     def addToCollumn(self, collumn, symbol):
         self.board[self.rowTops[collumn-1]][collumn-1] = symbol
@@ -89,7 +86,11 @@ class Board:
         print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
         self.end = True
 
-
+    def player(self, player):
+        if player == 1:
+            return self.p1Symbol
+        elif player == 2:
+            return self.p2Symbol
 
 
 #-------------------------------- GAME --------------------------------   

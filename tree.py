@@ -5,6 +5,12 @@ class Node:
         self.value = value      # is a matrix of the board
         self.children = children    # is a dictionary {1: node, 2: node, ...}
         
+    def setValue(self, value):
+        self.value = value
+        
+    def setChildren(self, children):
+        self.children = children
+        
         
 
 class Tree:
@@ -12,6 +18,7 @@ class Tree:
         self.player = player
         self.root = Node(board.board, {})
         children = self.genChildren(self.root)
+        self.root.setChildren(children)
         
     def genChildren(self, node):
         children = {}
