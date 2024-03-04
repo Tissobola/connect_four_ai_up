@@ -93,16 +93,6 @@ class Board:
             return self.p2Symbol
 
 
-#-------------------------------- GAME --------------------------------   
-board = Board()
 
-turn = 0
-collumn = 0
-
-while (board.end == False):
-    print(board)
-    while (collumn < 1 or collumn > 7):
-        collumn = int(input())
-    board.move(collumn, (turn % 2) + 1)
-    turn += 1
-    collumn = 0
+    
+    

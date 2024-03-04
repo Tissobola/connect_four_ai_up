@@ -1,5 +1,5 @@
-import board
 import tree
+import board
 
 #h(n): minimize the chances of the opponent to win and maximize the chances of the bot to win
 #g(n): uniform cost search minimizes the cost of the path from the root to the current n
@@ -20,16 +20,26 @@ class AStarBot:
         return 0
     
     def h(self, node):
-        current_board = node.board
-        
+        current_board = node.value
+        consecutives = []
+        consecutives.append(self.checkRows(current_board))
+        consecutives.append(self.checkCols(current_board))
+        consecutives.append(self.checkDiagonalsUpLeftToRight(current_board))
+        consecutives.append(self.checkDiagonalsDownLeftToRight(current_board))
+        results = [0, 0, 0, 0]
+        for i in range(len(consecutives)):
+            print(consecutives[i])
+            # for ii in range(len(consecutives)):
+                # results[ii] += consecutives[i][ii]
+
     def checkRows(self, current_board):
         consecutives = [0, 0, 0, 0]
         for i in range(4, 0, -1):
             inSequence = False
             counter = 0
-            for ii in range(len(current_board)):
-                for iii in range(len(current_board[0])):
-                    if current_board[ii][iii] == self.board.player(self.player):
+            for r in range(len(current_board)):
+                for c in range(len(current_board[0])):
+                    if current_board[r][c] == self.board.player(self.player):
                         counter += 1
                         inSequence = True
                     else:
@@ -38,18 +48,23 @@ class AStarBot:
                                 consecutives[i-1] += 1
                         counter = 0
                         inSequence = False
-                        if current_board[ii][iii] == self.board.nullSymbol:
-                            break
+                        # if current_board[r][c] == self.board.nullSymbol:
+                        #     break
+                if inSequence:
+                    if counter == i:
+                        consecutives[i-1] += 1
+                counter = 0
+                inSequence = False
         return consecutives
     
     def checkCols(self, current_board):
         consecutives = [0, 0, 0, 0]
         for i in range(4, 0, -1):
-            inSequence = False
-            counter = 0
-            for ii in range(len(current_board[0])):
-                for iii in range(len(current_board)):
-                    if current_board[iii][ii] == self.board.player(self.player):
+            for c in range(len(current_board[0])):
+                inSequence = False
+                counter = 0
+                for r in range(len(current_board)):
+                    if current_board[r][c] == self.board.player(self.player):
                         counter += 1
                         inSequence = True
                     else:
@@ -58,8 +73,13 @@ class AStarBot:
                                 consecutives[i-1] += 1
                         counter = 0
                         inSequence = False
-                        if current_board[iii][ii] == self.board.nullSymbol: #Verify behavior later
-                            break
+                        # if current_board[r][c] == self.board.nullSymbol: #Verify behavior later
+                        #     break
+                if inSequence:
+                    if counter == i:
+                        consecutives[i-1] += 1
+                counter = 0
+                inSequence = False
         return consecutives
     
     def checkDiagonalsUpLeftToRight(self, current_board):
@@ -68,7 +88,9 @@ class AStarBot:
             inSequence = False
             counter = 0
             for r in range(len(current_board)):
-                for s in range(r):
+                for s in range(len(current_board)):
+                    if ((s+r > len(current_board) - 1 - r) or (s > len(current_board))):
+                        break
                     if current_board[r+s][s] == self.board.player(self.player):
                         counter += 1
                         inSequence = True
@@ -78,11 +100,21 @@ class AStarBot:
                                 consecutives[i-1] += 1
                         counter = 0
                         inSequence = False
-                        if current_board[r+s][s] == self.board.nullSymbol:
-                            break
-            for c in range(1, len(current_board[0])):
-                for s in range(len(current_board[0]) - c):
-                    if current_board[s][c+s] == self.board.player(self.player):
+                        # if current_board[r+s][s] == self.board.nullSymbol:
+                        #     break
+                if inSequence:
+                    if counter == i:
+                        consecutives[i-1] += 1
+                counter = 0
+                inSequence = False
+            inSequence = False
+            counter = 0
+            for r in range(len(current_board)-1, -1, -1):
+                for s in range(len(current_board)):
+                    aux = len(current_board)-r+s
+                    if((s > r) or (aux > len(current_board))):
+                        break
+                    if current_board[s][aux] == self.board.player(self.player):
                         counter += 1
                         inSequence = True
                     else:
@@ -91,18 +123,23 @@ class AStarBot:
                                 consecutives[i-1] += 1
                         counter = 0
                         inSequence = False
-                        if current_board[s][c+s] == self.board.nullSymbol:
-                            break
+                        # if current_board[s][c+s] == self.board.nullSymbol:
+                        #     break
+                if inSequence:
+                    if counter == i:
+                        consecutives[i-1] += 1
+                counter = 0
+                inSequence = False
         return consecutives
     
-    def checkDiagonalsDownLeftToRight(self, current_board):             #TODO
+    def checkDiagonalsDownLeftToRight(self, current_board):
         consecutives = [0, 0, 0, 0]
         for i in range(4, 0, -1):
             inSequence = False
             counter = 0
             for r in range(len(current_board)):
-                for s in range(r):
-                    if current_board[r+s][s] == self.board.player(self.player):
+                for s in range(r+1):
+                    if current_board[r-s][s] == self.board.player(self.player):
                         counter += 1
                         inSequence = True
                     else:
@@ -111,8 +148,39 @@ class AStarBot:
                                 consecutives[i-1] += 1
                         counter = 0
                         inSequence = False
-                        if current_board[r+s][s] == self.board.nullSymbol:
-                            break
+                        # if current_board[r-s][s] == self.board.nullSymbol:
+                        #     break
+                if inSequence:
+                    if counter == i:
+                        consecutives[i-1] += 1
+                counter = 0
+                inSequence = False
+            inSequence = False
+            counter = 0
+            for r in range(len(current_board)):
+                for s in range(len(current_board)):
+                    aux = r+s
+                    aux2 = len(current_board)-s+r
+                    if (aux > len(current_board)-1):
+                        aux = len(current_board)-1
+                    if (aux2 > 6):
+                        aux2 = 6
+                    if current_board[aux][aux2] == self.board.player(self.player):
+                        counter += 1
+                        inSequence = True
+                    else:
+                        if inSequence:
+                            if counter == i:
+                                consecutives[i-1] += 1
+                        counter = 0
+                        inSequence = False
+                        # if current_board[r+s][len(current_board)-s] == self.board.nullSymbol:
+                        #     break
+                if inSequence:
+                    if counter == i:
+                        consecutives[i-1] += 1
+                counter = 0
+                inSequence = False
         return consecutives
                         
     def opponent(self, player):
