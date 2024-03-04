@@ -1,4 +1,5 @@
 import pygame 
+from interface import *
 
 class Button:
     def __init__(self, text, width, height, font, text_color, backgroud_color, x_pos, y_pos):
@@ -16,12 +17,14 @@ class Button:
                        'red': (255, 0, 0),
                        'camel': (230, 191, 131),
                        'brown': (193, 154, 107)}
+        self.rect = pygame.Rect(x_pos, y_pos, width, height)
+
 
     def draw(self, screen):
-        #pygame.draw.rect(screen, self.background_color)
         pygame.draw.rect(screen, self.background_color, (self.x_pos, self.y_pos, self.width, self.height))
         text_surface = self.font.render(self.text, True, self.colors['black'])
-        text_rect = self.text_surface.get_rect(center=(self.x_pos + self.width / 2, self.y_pos + self.height / 2))
+        text_rect = text_surface.get_rect(center=(self.x_pos + self.width / 2, self.y_pos + self.height / 2))
+
         screen.blit(text_surface, text_rect)
 
 
@@ -35,7 +38,8 @@ class Menu:
         self.width = 1024
         self.height = 700
         self.screen = pygame.display.set_mode((self.width, self.height))
-        self.font = pygame.font.SysFont('Cambria', 30)
+        self.font = pygame.font.SysFont('Cambria', 35)
+        self.button_font = pygame.font.SysFont('Arial', 15)
         self.menu_open = True
         self.colors = {'black': (0, 0, 0),
                        'white': ( 255, 255, 255),
@@ -44,8 +48,9 @@ class Menu:
                        'camel': (230, 191, 131),
                        'brown': (193, 154, 107)}
       
-        self.button = Button("Start Game", 400, 400, self.font, self.colors['brown'], self.colors['yellow'], 200, 50)
-
+        self.player_vs_player_button = Button("PLAYER vs PLAYER", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 - 25)
+        self.astar_button = Button("A*", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 + 50)
+        self.monte_carlo_button = Button("Monte Carlo", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 + 125)
     def setup(self):
         self.screen.fill(self.colors['camel'])
         pygame.display.set_caption("Connect Four Game")
@@ -63,15 +68,26 @@ class Menu:
                     if event.type == pygame.QUIT:
                         self.menu_open = False
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        if self.button.is_hovered(pygame.mouse.get_pos()):
-                            print("Button Clicked!")  
+                        if self.player_vs_player_button.collide_point(pygame.mouse.get_pos()):
+                            self.start_game_interface()
+                            print("Click")
+                            
                 
                 self.screen.fill(self.colors['camel']) 
-                self.text("C O N N E C T    F O U R", self.colors['brown'], self.width // 2, self.height // 2 - 150)  
-                self.button.draw(self.screen)
+                self.text("C O N N E C T    F O U R", self.colors['brown'], self.width // 2, self.height // 2 - 200)  
+                self.player_vs_player_button.draw(self.screen)
+                self.astar_button.draw(self.screen)
+                self.monte_carlo_button.draw(self.screen)
                 pygame.display.flip()
 
             pygame.quit()
+
+
+
+    def start_game_interface(self):
+        game_interface = Board_Interface(board.rows, board.cols, board.cols * board.rows, board)
+        game_interface.run_game()
+
 
 
 if __name__ == "__main__":

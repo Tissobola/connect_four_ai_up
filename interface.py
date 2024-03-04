@@ -63,7 +63,7 @@ class Piece:
         elif symbol == 'O':
             pygame.draw.circle(screen,(255, 255, 0), (x, y), self.radius)
 
-game_board = board.Board()
+game_board = Board()
 
 game = Board_Interface(6, 7,100, game_board)
 
