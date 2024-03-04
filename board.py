@@ -93,9 +93,9 @@ class Board:
 
 
 #-------------------------------- GAME -------------------------------- 
-        
-board = Board()
 '''
+board = Board()
+
 turn = 0
 collumn = 0
 
@@ -105,4 +105,5 @@ while (board.end == False):
         collumn = int(input())
     board.move(collumn, (turn % 2) + 1)
     turn += 1
-    collumn = 0'''
+    collumn = 0
+    '''
