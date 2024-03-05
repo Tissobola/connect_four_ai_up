@@ -1,5 +1,6 @@
 import pygame 
 from interface import *
+from board import *
 
 class Button:
     def __init__(self, text, width, height, font, text_color, backgroud_color, x_pos, y_pos):
@@ -11,6 +12,7 @@ class Button:
         self.background_color = backgroud_color
         self.x_pos = x_pos
         self.y_pos = y_pos
+        
         self.colors = {'black': (0, 0, 0),
                        'white': ( 255, 255, 255),
                        'yellow': (255, 255, 0),
@@ -51,6 +53,7 @@ class Menu:
         self.player_vs_player_button = Button("PLAYER vs PLAYER", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 - 25)
         self.astar_button = Button("A*", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 + 50)
         self.monte_carlo_button = Button("Monte Carlo", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 + 125)
+        self.game_board = Board()
     def setup(self):
         self.screen.fill(self.colors['camel'])
         pygame.display.set_caption("Connect Four Game")
@@ -85,12 +88,11 @@ class Menu:
 
 
     def start_game_interface(self):
-        game_interface = Board_Interface(board.rows, board.cols, board.cols * board.rows, board)
+        game_interface = Board_Interface(self.game_board.rows, self.game_board.cols, 100, self.game_board)
         game_interface.run_game()
 
 
 
-if __name__ == "__main__":
-    pygame.init()
-    menu = Menu()
-    menu.run()
+pygame.init()
+menu = Menu()
+menu.run()
