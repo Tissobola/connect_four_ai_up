@@ -7,13 +7,13 @@ class Piece:
         self.square_size = 100
         self.radius = int(self.square_size / 2 - 5)
     
-    def draw(self, screen, y, x, symbol):
+    def draw(self, screen, x, y, symbol):
         if symbol == 'X': 
-            pygame.draw.circle(screen, (255, 0, 0), (y, x), self.radius)
+            pygame.draw.circle(screen, (255, 0, 0), (x, y), self.radius)
         elif symbol == 'O':
-            pygame.draw.circle(screen,(255, 255, 0), (y, x), self.radius)
+            pygame.draw.circle(screen,(0, 0, 139), (x, y), self.radius)
         elif symbol == '.':
-            pygame.draw.circle(screen,(255, 255, 255), (y, x), self.radius)
+            pygame.draw.circle(screen,(255, 255, 255), (x, y), self.radius)
 
 
 class Board_Interface:
@@ -47,11 +47,11 @@ class Board_Interface:
 
         # Calculate the starting position to center the board
         self.start_x = (self.width - self.board_width) // 2
-        self.start_y = (self.height + 50 - self.board_height) // 2 #VERIFICADO
+        self.start_y = (self.height - self.board_height) // 2 #VERIFICADO
 
     def draw_board(self):
         #draw circles 
-        for row in range(self.game_board.rows - 1, -1, -1):
+        for row in range(5,-1,-1):
             for column in range(self.game_board.cols):
                 circle = Piece()
                 circle_x = self.start_x + (column * self.square_size) + (self.square_size // 2)
@@ -90,6 +90,7 @@ class Board_Interface:
     def run_game(self):
         click = pygame.mouse.get_pressed()
         running = True
+        game_turn = 0
         while running:
             self.draw_board()
             for event in pygame.event.get():
@@ -100,6 +101,7 @@ class Board_Interface:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+
                 # mouse touches
                 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -108,10 +110,38 @@ class Board_Interface:
                         row, column = self.convert_mouse_to_board_pos(x, y)
                         print(f'{row}, {column}')
                         # Handle the click here, e.g., updating the board
-                        self.game_board.addToCollumn(column, 'X')
+                        if game_turn == 0: 
+                            self.game_board.addToCollumn(column, 'X')
+                            if self.game_board.checkWinner('X', (row, column)):
+                                red_wins = pygame.font.Font(None, 30).render('Red Wins!', True, (255, 0, 0))
+                                text_rect = red_wins.get_rect(center=self.screen.get_rect().center)
+                                self.screen.blit(red_wins, text_rect)
+                                pygame.display.flip()  
+                                running = False
+                            game_turn = 1
+                        else: 
+                            self.game_board.addToCollumn(column, 'O')
+                         
+                            if self.game_board.checkWinner('O', (row, column)):
+                                blue_wins = pygame.font.Font(None, 30).render('Blue Wins!', True, (0, 0, 255))
+                                text_rect = blue_wins.get_rect(center=self.screen.get_rect().center)
+                                self.screen.blit(blue_wins, text_rect)
+                                pygame.display.flip()  # Atualize a tela para exibir o texto
+                                running = False  # Continue executando o loop para manter a janela aberta
+
+                            game_turn = 0
+                        
                         print(self.game_board)
                         self.draw_board()
             
                     
             self.screen.fill(self.colors['BACKGROUND'])
         pygame.quit()
+
+
+
+
+
+
+#SARA FAZER
+        #Condicao de empate
