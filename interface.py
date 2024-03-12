@@ -23,7 +23,7 @@ class Board_Interface:
         self.row_count = row_count
         self.column_count = column_count
         self.square_size = square_size
-        self.radius = self.radius = int(square_size / 2 - 5)
+        self.radius = int(square_size / 2 - 5)
         self.width = 1200
         self.height = 700
         #interface colors
