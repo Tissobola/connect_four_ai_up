@@ -1,6 +1,6 @@
 import pygame
 import sys
-from board import *
+from board_1 import *
 
 class Piece:
     def __init__(self):
@@ -35,12 +35,15 @@ class Board_Interface:
             "GRILL": (193, 154, 107),
             "EMPTY": (230, 230, 230)
         }
+
         #board
         self.game_board = board
         #screen
         self.screen = pygame.display.set_mode((self.width, self.height))
         #window name
         pygame.display.set_caption("CONNECT FOUR")
+        
+        self.clock = pygame.time.Clock()
         
         self.board_width = self.column_count * self.square_size #VERIFICADO
         self.board_height = self.row_count * self.square_size
@@ -51,9 +54,10 @@ class Board_Interface:
 
     def draw_board(self):
         #draw circles 
-        for row in range(5,-1,-1):
+        for row in range(self.game_board.rows - 1, -1, -1):
             for column in range(self.game_board.cols):
                 circle = Piece()
+
                 circle_x = self.start_x + (column * self.square_size) + (self.square_size // 2)
                 circle_y = self.start_y + (row * self.square_size) + (self.square_size // 2)
                 symbol = self.game_board.board[row][column]
@@ -79,12 +83,19 @@ class Board_Interface:
         y -= self.start_y
 
         # Encontrar a coluna
-        column = x // self.square_size
+        column = (x // self.square_size) + 1
 
         # Encontrar a linha
         row = y // self.square_size
 
         return row, column
+    
+    def win_text(self, player):
+        text = pygame.font.Font(None, 80).render(f'{player} WINS!', True, self.colors[player])
+        text_rect = text.get_rect(center=self.screen.get_rect().center)
+        self.screen.fill(self.colors['BACKGROUND'])
+        self.screen.blit(text, text_rect)
+
 
 
     def run_game(self):
@@ -110,38 +121,38 @@ class Board_Interface:
                         row, column = self.convert_mouse_to_board_pos(x, y)
                         print(f'{row}, {column}')
                         # Handle the click here, e.g., updating the board
-                        if game_turn == 0: 
-                            self.game_board.addToCollumn(column, 'X')
+                        if game_turn == 1:
+                            self.game_board.move(column, game_turn)
                             if self.game_board.checkWinner('X', (row, column)):
-                                red_wins = pygame.font.Font(None, 30).render('Red Wins!', True, (255, 0, 0))
-                                text_rect = red_wins.get_rect(center=self.screen.get_rect().center)
-                                self.screen.blit(red_wins, text_rect)
-                                pygame.display.flip()  
-                                running = False
-                            game_turn = 1
-                        else: 
-                            self.game_board.addToCollumn(column, 'O')
-                         
-                            if self.game_board.checkWinner('O', (row, column)):
-                                blue_wins = pygame.font.Font(None, 30).render('Blue Wins!', True, (0, 0, 255))
-                                text_rect = blue_wins.get_rect(center=self.screen.get_rect().center)
-                                self.screen.blit(blue_wins, text_rect)
-                                pygame.display.flip()  # Atualize a tela para exibir o texto
-                                running = False  # Continue executando o loop para manter a janela aberta
+                                
+                                pygame.time.delay(1000)
 
-                            game_turn = 0
+                                #win text -> red 
+                                self.win_text("RED")
+                                
+                                pygame.display.flip() 
+                                pygame.time.delay(500)
+                                
+                                running = False
+                            game_turn = 2
+                        else: 
+                            self.game_board.move(column, game_turn)
+                            
+                            if self.game_board.checkWinner('O', (row, column)):
+                                pygame.time.delay(1000)
+                                
+                                self.win_text("BLUE")
+                                pygame.display.flip()  # Atualize a tela para exibir o texto
+                                
+                                pygame.time.delay(500)
+                                running = False  # Continue executando o loop para manter a janela aberta
+                                
+
+                            game_turn = 1
                         
-                        print(self.game_board)
                         self.draw_board()
+                        print(self.game_board)
             
                     
             self.screen.fill(self.colors['BACKGROUND'])
         pygame.quit()
-
-
-
-
-
-
-#SARA FAZER
-        #Condicao de empate
