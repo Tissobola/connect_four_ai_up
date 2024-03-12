@@ -1,6 +1,6 @@
 import pygame
 import sys
-from board import *
+from board_1 import *
 
 
 # Class to create the game pieces 
@@ -37,13 +37,14 @@ class Board_Interface:
             "GRILL": (193, 154, 107),
             "EMPTY": (230, 230, 230)
         }
+
         #board
         self.game_board = board
         #screen
         self.screen = pygame.display.set_mode((self.width, self.height))
         #window name
         pygame.display.set_caption("CONNECT FOUR")
-        #Clock
+        
         self.clock = pygame.time.Clock()
         
         self.board_width = self.column_count * self.square_size #VERIFICADO
@@ -55,9 +56,10 @@ class Board_Interface:
 
     def draw_board(self):
         #draw circles 
-        for row in range(5,-1,-1):
+        for row in range(self.game_board.rows - 1, -1, -1):
             for column in range(self.game_board.cols):
                 circle = Piece()
+
                 circle_x = self.start_x + (column * self.square_size) + (self.square_size // 2)
                 circle_y = self.start_y + (row * self.square_size) + (self.square_size // 2)
                 symbol = self.game_board.board[row][column]
@@ -83,22 +85,12 @@ class Board_Interface:
         y -= self.start_y
 
         # Encontrar a coluna
-        column = x // self.square_size
+        column = (x // self.square_size) + 1
 
         # Encontrar a linha
         row = y // self.square_size
 
         return row, column
-    
-    def draw_text(self, text, font_size, color, x, y, duration):
-        font = pygame.font.SysFont(None, font_size)
-        text_surface = font.render(text, True, color)
-        text_rect = text_surface.get_rect()
-        text_rect.center = (x, y)
-        self.screen.blit(text_surface, text_rect)
-        
-        pygame.display.update()
-        pygame.time.delay(duration)
 
 
     def run_game(self):
@@ -124,33 +116,38 @@ class Board_Interface:
                         row, column = self.convert_mouse_to_board_pos(x, y)
                         print(f'{row}, {column}')
                         # Handle the click here, e.g., updating the board
-                        if game_turn == 0: 
-                            self.game_board.addToCollumn(column, 'X')
-                            game_turn = 1
-                            print("entrou")
+                        if game_turn == 1:
+                            self.game_board.move(column, game_turn)
                             if self.game_board.checkWinner('X', (row, column)):
-                                print("RED")
-                                self.draw_text('Red Wins!', 70, (255, 0, 0), 600, 50, 5000)
-                                self.clock.tick(60)
+                                
+                                pygame.time.delay(1000)
+
+                                #win text -> red 
+                                self.win_text("RED")
+                                
+                                pygame.display.flip() 
+                                pygame.time.delay(500)
                                 
                                 running = False
-                              
+                            game_turn = 2
                         else: 
-                            self.game_board.addToCollumn(column, 'O')
-                            game_turn = 0
-                         
+                            self.game_board.move(column, game_turn)
+                            
                             if self.game_board.checkWinner('O', (row, column)):
-                                self.draw_text('Blue Wins!', 70, (0, 0, 139), 600, 50, 5000)
-                                self.clock.tick(60)
+                                pygame.time.delay(1000)
                                 
-                                running = False
-                               
+                                self.win_text("BLUE")
+                                pygame.display.flip()  # Atualize a tela para exibir o texto
+                                
+                                pygame.time.delay(500)
+                                running = False  # Continue executando o loop para manter a janela aberta
+                                
+
+                            game_turn = 1
                         
-                        print(self.game_board)
                         self.draw_board()
+                        print(self.game_board)
             
                     
             self.screen.fill(self.colors['BACKGROUND'])
         pygame.quit()
-
-
