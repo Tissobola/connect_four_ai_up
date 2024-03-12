@@ -2,6 +2,8 @@ import pygame
 import sys
 from board import *
 
+
+# Class to create the game pieces 
 class Piece:
     def __init__(self):
         self.square_size = 100
@@ -41,13 +43,15 @@ class Board_Interface:
         self.screen = pygame.display.set_mode((self.width, self.height))
         #window name
         pygame.display.set_caption("CONNECT FOUR")
+        #Clock
+        self.clock = pygame.time.Clock()
         
         self.board_width = self.column_count * self.square_size #VERIFICADO
         self.board_height = self.row_count * self.square_size
 
         # Calculate the starting position to center the board
         self.start_x = (self.width - self.board_width) // 2
-        self.start_y = (self.height - self.board_height) // 2 #VERIFICADO
+        self.start_y = (self.height - self.board_height + 50) // 2 #VERIFICADO
 
     def draw_board(self):
         #draw circles 
@@ -85,6 +89,16 @@ class Board_Interface:
         row = y // self.square_size
 
         return row, column
+    
+    def draw_text(self, text, font_size, color, x, y, duration):
+        font = pygame.font.SysFont(None, font_size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.center = (x, y)
+        self.screen.blit(text_surface, text_rect)
+        
+        pygame.display.update()
+        pygame.time.delay(duration)
 
 
     def run_game(self):
@@ -112,24 +126,25 @@ class Board_Interface:
                         # Handle the click here, e.g., updating the board
                         if game_turn == 0: 
                             self.game_board.addToCollumn(column, 'X')
-                            if self.game_board.checkWinner('X', (row, column)):
-                                red_wins = pygame.font.Font(None, 30).render('Red Wins!', True, (255, 0, 0))
-                                text_rect = red_wins.get_rect(center=self.screen.get_rect().center)
-                                self.screen.blit(red_wins, text_rect)
-                                pygame.display.flip()  
-                                running = False
                             game_turn = 1
+                            print("entrou")
+                            if self.game_board.checkWinner('X', (row, column)):
+                                print("RED")
+                                self.draw_text('Red Wins!', 70, (255, 0, 0), 600, 50, 5000)
+                                self.clock.tick(60)
+                                
+                                running = False
+                              
                         else: 
                             self.game_board.addToCollumn(column, 'O')
+                            game_turn = 0
                          
                             if self.game_board.checkWinner('O', (row, column)):
-                                blue_wins = pygame.font.Font(None, 30).render('Blue Wins!', True, (0, 0, 255))
-                                text_rect = blue_wins.get_rect(center=self.screen.get_rect().center)
-                                self.screen.blit(blue_wins, text_rect)
-                                pygame.display.flip()  # Atualize a tela para exibir o texto
-                                running = False  # Continue executando o loop para manter a janela aberta
-
-                            game_turn = 0
+                                self.draw_text('Blue Wins!', 70, (0, 0, 139), 600, 50, 5000)
+                                self.clock.tick(60)
+                                
+                                running = False
+                               
                         
                         print(self.game_board)
                         self.draw_board()
@@ -139,9 +154,3 @@ class Board_Interface:
         pygame.quit()
 
 
-
-
-
-
-#SARA FAZER
-        #Condicao de empate

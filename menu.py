@@ -73,7 +73,7 @@ class Menu:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.player_vs_player_button.collide_point(pygame.mouse.get_pos()):
                             self.start_game_interface()
-                            print("Click")
+                            
                             
                 
                 self.screen.fill(self.colors['camel']) 
