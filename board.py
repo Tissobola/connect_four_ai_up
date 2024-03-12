@@ -28,16 +28,20 @@ class Board:
             self.board.append(aux.copy())
 
     def move(self, collumn, player):
-        if player == 1:
-            self.addToCollumn(collumn, self.p1Symbol)
-        elif player == 2:
-            self.addToCollumn(collumn, self.p2Symbol)
+            return self.addToCollumn(collumn, self.player(player))
             
     def addToCollumn(self, collumn, symbol):
-        self.board[self.rowTops[collumn]][collumn] = symbol
-        if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
-            self.showWinner(symbol)
-        self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
+        #self.board[self.rowTops[collumn]][collumn] = symbol
+        #if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
+        #    self.showWinner(symbol)
+        #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
+        for i in range(len(self.board)):
+            if self.board[i][collumn-1] == self.nullSymbol:
+                self.board[i][collumn-1] = symbol
+                if self.checkWinner(symbol, (i,collumn-1)):
+                    self.showWinner(symbol)
+                return True
+        return False
         
     def checkWinner(self, player, last_move):
         row, col = last_move
@@ -88,24 +92,11 @@ class Board:
                     
                     
     def showWinner(self, player):
-        print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
         self.end = True
+        # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
 
-
-
-
-#-------------------------------- GAME -------------------------------- 
-'''
-board = Board()
-
-turn = 0
-collumn = 0
-
-while (board.end == False):
-    print(board)
-    while (collumn < 1 or collumn > 7):
-        collumn = int(input())
-    board.move(collumn, (turn % 2) + 1)
-    turn += 1
-    collumn = 0
-    '''
+    def player(self, player):
+        if player == 1:
+            return self.p1Symbol
+        elif player == 2:
+            return self.p2Symbol
