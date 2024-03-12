@@ -12,16 +12,29 @@ class AStarBot:
         
     def play(self):
         movesTree = tree.Tree(self.board, self.player)
-        best_move = (4, self.f(movesTree.root.children[3]))
+        print(self.checkDiagonalsDownLeftToRight(self.board.board, self.player))
+        forbiddenMove = []
+        while True:
+            bestMove = self.bestMove(movesTree, [])
+            if not self.board.move(bestMove[0], self.player):
+                forbiddenMove.append(bestMove[0])
+            else:
+                return True
+            
+    def bestMove(self, movesTree, forbidenMoves):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
+        bestMove = (4, self.f(movesTree.root.children[3]))
         for i in movesTree.root.children:
-            f = self.f(movesTree.root.children[i])
-            g = self.g(movesTree.root.children[i])
-            h = self.h(movesTree.root.children[i])
-            # print(i+1, f, "=", h, "+", g)
-            if f < best_move[1]:
-                # print("esse")
-                best_move = (i+1, f)
-        self.board.move(best_move[0], self.player)
+            if not forbidenMoves.__contains__(i+1):
+                f = self.f(movesTree.root.children[i])
+                # g = self.g(movesTree.root.children[i])
+                # h = self.h(movesTree.root.children[i])
+                # print(i+1, f, "=", h, "+", g)
+                if f < bestMove[1]:
+                    # print("esse")
+                    bestMove = (i+1, f)
+        return bestMove
+        
+    
         
     def f(self, node):
         return self.h(node) + self.g(node)
@@ -170,12 +183,12 @@ class AStarBot:
             counter = 0
             for r in range(len(currentBoard)):
                 for s in range(r+1):
-                    if currentBoard[r-s][s] == self.board.player(currentPlayer):
+                    if currentBoard[s][r-s] == self.board.player(currentPlayer):
                         counter += 1
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[r-s][s] != self.board.player(self.opponent()):
+                            if currentBoard[s][r-s] != self.board.player(self.opponent()):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
@@ -187,20 +200,19 @@ class AStarBot:
                 inSequence = False
             inSequence = False
             counter = 0
-            for r in range(len(currentBoard)):
-                for s in range(len(currentBoard)):
-                    aux = r+s
-                    aux2 = len(currentBoard)-s+r
-                    if (aux > len(currentBoard)-1):
-                        aux = len(currentBoard)-1
-                    if (aux2 > 6):
-                        aux2 = 6
-                    if currentBoard[aux][aux2] == self.board.player(currentPlayer):
+            for r in range(1, len(currentBoard)):
+                for s in range(r, len(currentBoard)):
+                    
+                    aux = len(currentBoard)+1+r-s
+                    if (aux > len(currentBoard)):
+                        aux = len(currentBoard)
+                    
+                    if currentBoard[s][aux] == self.board.player(currentPlayer):
                         counter += 1
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[aux][aux2] != self.board.player(self.opponent()):
+                            if currentBoard[s][aux] != self.board.player(self.opponent()):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
