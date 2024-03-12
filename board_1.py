@@ -6,7 +6,7 @@ class Board:
         self.nullSymbol = '.'
         self.p1Symbol = 'X'
         self.p2Symbol = 'O'
-        self.rowTops = [5,5,5,5,5,5,5] #as peças iniciais vão para a posicao (5, col)
+        self.rowTops = [0, 0, 0, 0, 0, 0, 0]
         self.populateBoard()
         self.end = False
         
@@ -28,20 +28,15 @@ class Board:
             self.board.append(aux.copy())
 
     def move(self, collumn, player):
-            return self.addToCollumn(collumn, self.player(player))
+            self.addToCollumn(collumn, self.player(player))
             
     def addToCollumn(self, collumn, symbol):
-        #self.board[self.rowTops[collumn]][collumn] = symbol
-        #if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
-        #    self.showWinner(symbol)
-        #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
-        for i in range(len(self.board)):
-            if self.board[i][collumn-1] == self.nullSymbol:
-                self.board[i][collumn-1] = symbol
-                if self.checkWinner(symbol, (i,collumn-1)):
-                    self.showWinner(symbol)
-                return True
-        return False
+        self.board[self.rowTops[collumn-1]][collumn-1] = symbol
+        if self.checkWinner(symbol, (self.rowTops[collumn-1],collumn-1)):
+            self.showWinner(symbol)
+        print("board collumn:", collumn)
+        self.rowTops[collumn-1] += 1
+        print("selfrowtops:", self.rowTops)
         
     def checkWinner(self, player, last_move):
         row, col = last_move
@@ -81,22 +76,22 @@ class Board:
         # Check diagonal down-left-to-right
         count = 0
         for i in range(-3, 4):
-            if 0 <= row + i < self.rows and 0 <= col - i < self.cols:
-                if self.board[row + i][col - i] == token:
+            if 0 <= row - i < self.rows and 0 <= col + i < self.cols:
+                if self.board[row - i][col + i] == token:
                     count += 1
                     if count == 4:
                         return True
                 else:
                     count = 0
-
-                    
                     
     def showWinner(self, player):
+        print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
         self.end = True
-        # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
 
     def player(self, player):
         if player == 1:
             return self.p1Symbol
         elif player == 2:
             return self.p2Symbol
+
+    
