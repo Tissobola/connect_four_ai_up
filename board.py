@@ -6,14 +6,13 @@ class Board:
         self.nullSymbol = '.'
         self.p1Symbol = 'X'
         self.p2Symbol = 'O'
-        self.rowTops = [5,5,5,5,5,5,5] #as peças iniciais vão para a posicao (5, col)
         self.populateBoard()
         self.end = False
-        
+
     def __str__(self):
         line = ""
         result = ""
-        for i in range(0,6):
+        for i in range(5, -1, -1):
             for ii in range(self.cols):
                 line += self.board[i][ii]
             result += line + "\n"
@@ -28,7 +27,7 @@ class Board:
             self.board.append(aux.copy())
 
     def move(self, collumn, player):
-            return self.addToCollumn(collumn, self.player(player))
+        return self.addToCollumn(collumn, self.player(player))
             
     def addToCollumn(self, collumn, symbol):
         #self.board[self.rowTops[collumn]][collumn] = symbol
@@ -36,11 +35,10 @@ class Board:
         #    self.showWinner(symbol)
         #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
         for i in range(len(self.board)):
-            if self.board[i][collumn-1] == self.nullSymbol:
+            if self.board[i][collumn-1] == self.nullSymbol or i == self.rows - 1:
                 self.board[i][collumn-1] = symbol
-                if self.checkWinner(symbol, (i,collumn-1)):
-                    self.showWinner(symbol)
                 return True
+            
         return False
         
     def checkWinner(self, player, last_move):
@@ -89,11 +87,11 @@ class Board:
                 else:
                     count = 0
 
-                    
+        return False 
                     
     def showWinner(self, player):
         self.end = True
-        # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
+        print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
 
     def player(self, player):
         if player == 1:
