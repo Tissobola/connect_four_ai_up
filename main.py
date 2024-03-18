@@ -13,10 +13,9 @@ bot = heuristic.AStarBot(game_board, 2)
 turn = 0
 collumn = 0
 
-pygame.init()
-game = interface.Board_Interface(6, 7, 100, game_board)
-game.run_game()
-'''
+# pygame.init()
+# game = interface.Board_Interface(6, 7, 100, game_board)
+# game.run_game()
 
 print(game_board)
 while (not game_board.end):
@@ -25,5 +24,5 @@ while (not game_board.end):
   else:
     bot.play()
   turn += 1
+
   print(game_board)
-'''
