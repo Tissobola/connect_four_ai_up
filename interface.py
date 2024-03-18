@@ -95,6 +95,8 @@ class Board_Interface:
         font = pygame.font.Font(None, 36)  
         text = font.render(f"Player {color} wins!", True, self.colors[color])  
         text_rect = text.get_rect(center=(self.width // 2, self.height // 2))  
+        background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20, text_rect.height + 20)
+        pygame.draw.rect(self.screen, (255, 255, 255), background_rect)
         self.screen.blit(text, text_rect)  #draw the win text
             
     def run_game(self):
