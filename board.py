@@ -6,14 +6,13 @@ class Board:
         self.nullSymbol = '.'
         self.p1Symbol = 'X'
         self.p2Symbol = 'O'
-        self.rowTops = [5,5,5,5,5,5,5] #as peças iniciais vão para a posicao (5, col)
         self.populateBoard()
         self.end = False
         
     def __str__(self):
         line = ""
         result = ""
-        for i in range(0,6):
+        for i in range(5, -1, -1):
             for ii in range(self.cols):
                 line += self.board[i][ii]
             result += line + "\n"
