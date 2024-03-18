@@ -1,14 +1,14 @@
 import board
 import interface
 import pygame
-import heuristic
+import astar
 import tree
 
 
 
 #-------------------------------- GAME --------------------------------
 game_board = board.Board()
-bot = heuristic.AStarBot(game_board, 2)
+bot = astar.AStarBot(game_board, 2)
 
 turn = 0
 collumn = 0

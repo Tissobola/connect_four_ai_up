@@ -31,12 +31,14 @@ class Board:
             
     def addToCollumn(self, collumn, symbol):
         #self.board[self.rowTops[collumn]][collumn] = symbol
-        #if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
+        # if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
         #    self.showWinner(symbol)
         #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
         for i in range(len(self.board)):
             if self.board[i][collumn-1] == self.nullSymbol or i == self.rows - 1:
                 self.board[i][collumn-1] = symbol
+                if self.checkWinner(symbol, (i,collumn-1)):
+                    self.showWinner(symbol)
                 return True
             
         return False
@@ -91,7 +93,7 @@ class Board:
                     
     def showWinner(self, player):
         self.end = True
-        print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
+        # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
 
     def player(self, player):
         if player == 1:
