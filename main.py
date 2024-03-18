@@ -24,4 +24,5 @@ while (not game_board.end):
   else:
     bot.play()
   turn += 1
+
   print(game_board)

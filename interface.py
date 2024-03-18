@@ -1,6 +1,6 @@
 import pygame
 import sys
-from board_1 import *
+from board import *
 
 
 # Class to create the game pieces 
@@ -56,12 +56,11 @@ class Board_Interface:
 
     def draw_board(self):
         #draw circles 
-        for row in range(self.game_board.rows - 1, -1, -1):
+        for row in range(self.game_board.rows):
             for column in range(self.game_board.cols):
                 circle = Piece()
-
                 circle_x = self.start_x + (column * self.square_size) + (self.square_size // 2)
-                circle_y = self.start_y + (row * self.square_size) + (self.square_size // 2)
+                circle_y = self.start_y + ((self.game_board.rows - row - 1) * self.square_size) + (self.square_size // 2)
                 symbol = self.game_board.board[row][column]
                 circle.draw(self.screen, circle_x, circle_y, symbol)
                 
@@ -91,12 +90,17 @@ class Board_Interface:
         row = y // self.square_size
 
         return row, column
-
-
+    
+    def win_text(self, color):
+        font = pygame.font.Font(None, 36)  
+        text = font.render(f"Player {color} wins!", True, self.colors[color])  
+        text_rect = text.get_rect(center=(self.width // 2, self.height // 2))  
+        self.screen.blit(text, text_rect)  #draw the win text
+            
     def run_game(self):
         click = pygame.mouse.get_pressed()
         running = True
-        game_turn = 0
+        game_turn = 1
         while running:
             self.draw_board()
             for event in pygame.event.get():
@@ -111,17 +115,17 @@ class Board_Interface:
                 # mouse touches
                 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    
                     if event.button == 1:  # Left mouse button
                         x, y = pygame.mouse.get_pos()
                         row, column = self.convert_mouse_to_board_pos(x, y)
-                        print(f'{row}, {column}')
                         # Handle the click here, e.g., updating the board
+                        print(f'{column}')
                         if game_turn == 1:
                             self.game_board.move(column, game_turn)
-                            if self.game_board.checkWinner('X', (row, column)):
-                                
-                                pygame.time.delay(1000)
-
+                            if self.game_board.checkWinner('X', (row, column -1)):
+                                print("Entrei")
+                                self.draw_board()
                                 #win text -> red 
                                 self.win_text("RED")
                                 
@@ -129,23 +133,25 @@ class Board_Interface:
                                 pygame.time.delay(500)
                                 
                                 running = False
+                                
                             game_turn = 2
                         else: 
                             self.game_board.move(column, game_turn)
                             
-                            if self.game_board.checkWinner('O', (row, column)):
-                                pygame.time.delay(1000)
+                            if self.game_board.checkWinner('O', (row, column-1)):
+                                self.draw_board()
                                 
                                 self.win_text("BLUE")
-                                pygame.display.flip()  # Atualize a tela para exibir o texto
+                                
+                                pygame.display.flip()
                                 
                                 pygame.time.delay(500)
-                                running = False  # Continue executando o loop para manter a janela aberta
+                                running = False  
                                 
-
+                            
                             game_turn = 1
                         
-                        self.draw_board()
+                        
                         print(self.game_board)
             
                     

@@ -1,6 +1,6 @@
 import pygame 
 from interface import *
-from board_1 import *
+from board import *
 
 class Button:
     def __init__(self, text, width, height, font, text_color, backgroud_color, x_pos, y_pos):
@@ -73,7 +73,9 @@ class Menu:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.player_vs_player_button.collide_point(pygame.mouse.get_pos()):
                             self.start_game_interface()
-                            
+                        elif self.astar_button.collide_point(pygame.mouse.get_pos()):
+                            self.start_game_interface_astart()
+                        
                             
                 
                 self.screen.fill(self.colors['camel']) 
@@ -90,6 +92,11 @@ class Menu:
     def start_game_interface(self):
         game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
         game_interface.run_game()
+    
+    def start_game_interface_astar(self):
+        game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
+        game_interface.run_game()
+    
 
 
 
