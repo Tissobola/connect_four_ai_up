@@ -7,12 +7,16 @@ class Board:
         self.p1Symbol = 'X'
         self.p2Symbol = 'O'
         self.populateBoard()
-        self.end = False
+        self.algorithm1 = None
+        self.algorithm2 = None
+        self.winner = None
+        self.turn = self.p1Symbol# Primeiro jogador = X
+        self.end = False # Fim do jogo
 
     def __str__(self):
         line = ""
         result = ""
-        for i in range(5, -1, -1):
+        for i in range(0, 6):
             for ii in range(self.cols):
                 line += self.board[i][ii]
             result += line + "\n"
@@ -25,26 +29,42 @@ class Board:
             aux.append(self.nullSymbol)
         for i in range(self.rows):
             self.board.append(aux.copy())
-
-    def move(self, collumn, player):
-        return self.addToCollumn(collumn, self.player(player))
+    
+    def change_turn(self): # Muda de jogador 
+        if self.turn == self.p1Symbol:
+            self.turn = self.p2Symbol
+        elif self.turn == self.p2Symbol:
+            self.turn = self.p1Symbol
+        return self.turn
+        
+    def move(self, collumn):
+        return self.addToCollumn(collumn, self.turn)
             
     def addToCollumn(self, collumn, symbol):
+
         #self.board[self.rowTops[collumn]][collumn] = symbol
         # if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
         #    self.showWinner(symbol)
         #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
-        for i in range(len(self.board)):
-            if self.board[i][collumn-1] == self.nullSymbol or i == self.rows - 1:
-                self.board[i][collumn-1] = symbol
-                if self.checkWinner(symbol, (i,collumn-1)):
-                    self.showWinner(symbol)
+        
+        for i in range(len(self.board) -1 , -1, -1): # i = número de linhas
+            if self.board[i][collumn] == self.nullSymbol:
+                self.board[i][collumn] = symbol
+                self.change_turn() # Muda de jogador 
+                if self.checkWinner(symbol, collumn):
+                   print("Ganhou")
+                   self.winner=self.turn
+                   self.end = True
                 return True
-            
         return False
         
-    def checkWinner(self, player, last_move):
-        row, col = last_move
+
+
+    def checkWinner(self, player, col):
+        row = 0
+        while(self.board[row][col]!=player):
+            row += 1
+        
         token = player  # assuming player's token is represented by 'X' or 'O'
 
         # Check horizontal
@@ -69,6 +89,7 @@ class Board:
 
         # Check diagonal up-left-to-right
         count = 0
+        
         for i in range(-3, 4):
             if 0 <= row + i < self.rows and 0 <= col + i < self.cols:
                 if self.board[row + i][col + i] == token:
@@ -91,12 +112,7 @@ class Board:
 
         return False
                     
-    def showWinner(self, player):
+    '''def showWinner(self, player):
         self.end = True
         # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
-
-    def player(self, player):
-        if player == 1:
-            return self.p1Symbol
-        elif player == 2:
-            return self.p2Symbol
+    '''

@@ -1,6 +1,7 @@
 import pygame 
 from interface import *
 from board import *
+import play_game
 
 class Button:
     def __init__(self, text, width, height, font, text_color, backgroud_color, x_pos, y_pos):
@@ -66,15 +67,21 @@ class Menu:
 
     def run(self):
             self.setup()
+            algorithm = None
             while self.menu_open:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.menu_open = False
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.player_vs_player_button.collide_point(pygame.mouse.get_pos()):
-                            self.start_game_interface()
+                            algorithm1 = None
                         elif self.astar_button.collide_point(pygame.mouse.get_pos()):
-                            self.start_game_interface_astart()
+                            algorithm1 = "astar"
+                        elif self.monte_carlo_button.collide_point(pygame.mouse.get_pos()):
+                            algorithm1 = "montecarlo"
+
+                        if algorithm:
+                            play_game.main(board, algorithm1, algorithm2, True)
                         
                             
                 
@@ -89,13 +96,9 @@ class Menu:
 
 
 
-    def start_game_interface(self):
+    def start_game_interface(self, algorithm):
         game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
-        game_interface.run_game()
-    
-    def start_game_interface_astar(self):
-        game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
-        game_interface.run_game()
+        game_interface.run_game(algorithm)
     
 
 

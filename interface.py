@@ -1,4 +1,5 @@
 import pygame
+from astar import AStarBot
 import sys
 from board import *
 
@@ -97,7 +98,7 @@ class Board_Interface:
         text_rect = text.get_rect(center=(self.width // 2, self.height // 2))  
         self.screen.blit(text, text_rect)  #draw the win text
             
-    def run_game(self):
+    def run_game(self, algorithm):
         click = pygame.mouse.get_pressed()
         running = True
         game_turn = 1
@@ -117,14 +118,12 @@ class Board_Interface:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     
                     if event.button == 1:  # Left mouse button
-                        x, y = pygame.mouse.get_pos()
-                        row, column = self.convert_mouse_to_board_pos(x, y)
                         # Handle the click here, e.g., updating the board
-                        print(f'{column}')
                         if game_turn == 1:
+                            x, y = pygame.mouse.get_pos()
+                            _, column = self.convert_mouse_to_board_pos(x, y)
                             self.game_board.move(column, game_turn)
-                            if self.game_board.checkWinner('X', (row, column -1)):
-                                print("Entrei")
+                            if self.game_board.checkWinner('X', column -1):
                                 self.draw_board()
                                 #win text -> red 
                                 self.win_text("RED")
@@ -136,9 +135,22 @@ class Board_Interface:
                                 
                             game_turn = 2
                         else: 
+                            if algorithm == "astart":
+                                astar = AStarBot(self.game_board, game_turn)
+                                column = astar.bestMove()
+                            if algorithm == "montecarlo":
+                                pass
+                                # x, y = algorithm
+                            if algorithm == "minimax":
+                                pass
+                                # x, y = algorithm
+                            if algorithm == "pvp":
+                                x, y = pygame.mouse.get_pos()
+                                _, column = self.convert_mouse_to_board_pos(x, y)
+
                             self.game_board.move(column, game_turn)
                             
-                            if self.game_board.checkWinner('O', (row, column-1)):
+                            if self.game_board.checkWinner('O', column-1):
                                 self.draw_board()
                                 
                                 self.win_text("BLUE")
