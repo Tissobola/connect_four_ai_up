@@ -154,6 +154,7 @@ def play_game(game):
                     game.move(algorithms_move(game, game.algorithm1))
 
         pygame.display.update()
+    
 
 def algorithm_vs_algorithm(game):
     pygame.init()

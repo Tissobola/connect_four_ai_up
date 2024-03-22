@@ -1,6 +1,7 @@
 import pygame 
 from interface import *
 from board import *
+import heuristic
 import play_game
 
 class Button:
@@ -45,7 +46,7 @@ class Menu:
         self.button_font = pygame.font.SysFont('Arial', 15)
         self.menu_open = True
         self.colors = {'black': (0, 0, 0),
-                       'white': ( 255, 255, 255),
+                       'white': (255, 255, 255),
                        'yellow': (255, 255, 0),
                        'red': (255, 0, 0),
                        'camel': (230, 191, 131),
@@ -98,7 +99,13 @@ class Menu:
 
     def start_game_interface(self, algorithm):
         game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
-        game_interface.run_game(algorithm)
+        game_interface.run_game()
+    
+    def start_game_interface_astar(self):
+        game_board = Board()
+        bot = heuristic.AStarBot(game_board, 2)
+        game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
+        game_interface.run_game()
     
 
 
