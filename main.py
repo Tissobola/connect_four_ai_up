@@ -26,6 +26,7 @@ while (not game.end):
   print(game)
     
 game.run_game()
+game.run_game()
 
 '''
 

@@ -1,8 +1,8 @@
 import pygame 
 from interface import *
 from board import *
-import heuristic
 import play_game
+import heuristic
 
 class Button:
     def __init__(self, text, width, height, font, text_color, backgroud_color, x_pos, y_pos):

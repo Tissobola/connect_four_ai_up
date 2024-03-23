@@ -10,7 +10,7 @@ row_count = 6
 square_size = 100
 
 # Set the dimensions of the screen
-width = collumn_count * square_size
+width = collumn_count * square_size 
 height = (row_count + 1) * square_size
 
 colors = {
@@ -42,6 +42,8 @@ def draw_hover_piece(screen, current_player, column, piece_surface):
 
     screen.blit(piece_surface, (center_x - square_size // 2, center_y - square_size // 2))
 
+
+
 def draw_board(game, screen):
     def draw_pieces():
         def draw(color):
@@ -61,11 +63,14 @@ def draw_board(game, screen):
                     draw(colors["BLUE"])
 
     if game.end:
+       
         font = pygame.font.Font(None, 64)
         if game.winner == "O":
             winner_text = font.render("Red wins!", True, colors["RED"])
         elif game.winner == "X":
             winner_text = font.render("Blue wins!", True, colors["BLUE"])
+        elif game.winner == "O":
+            winner_text = font.render("Red wins!", True, colors["RED"])
         else:
             winner_text = font.render("It's a tie!", True, colors["BLACK"])
         text_rect = winner_text.get_rect(center=(width // 2, square_size // 2))
@@ -131,6 +136,7 @@ def play_on_terminal(game, verbose=True):
                     game.move(algorithms_move(game, game.algorithm2))
 
 def play_game(game):
+    print(game.end)
     pygame.init()
     clock = pygame.time.Clock()
     clock.tick(60)
@@ -139,6 +145,7 @@ def play_game(game):
     pygame.display.set_caption('Connect 4 - player vs ' + str(game.algorithm1))
 
     while not game.end:
+       
         draw_board(game, screen)
         event = pygame.event.wait()
         if event.type == pygame.QUIT:
@@ -208,3 +215,4 @@ def main(game, algorithm1, algorithm2, GUI):
                     play_game(game)
         else:
             play_game(game)
+         
