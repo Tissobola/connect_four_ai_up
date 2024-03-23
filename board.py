@@ -53,6 +53,7 @@ class Board:
                 self.change_turn() # Muda de jogador 
                 if self.checkWinner(symbol, collumn):
                    print("Ganhou")
+                
                    self.winner=self.turn
                    self.end = True
                 return True
