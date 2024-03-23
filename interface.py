@@ -1,5 +1,4 @@
 import pygame
-from astar import AStarBot
 import sys
 from board import *
 

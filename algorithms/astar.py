@@ -8,14 +8,14 @@ import board
 class AStarBot:
     def __init__(self, board, player):
         self.board = board      # board object
-        self.player = player    # 1 or 2
+        self.player = player    # 'X' or 'O'
 
     def play(self):
         movesTree = tree.Tree(self.board, self.player)
         forbiddenMove = []
         while True:
             bestMove = self.bestMove(movesTree, [])
-            if not self.board.move(bestMove[0], self.player):
+            if not self.board.move(bestMove[0]):
                 forbiddenMove.append(bestMove[0])
             else:
                 return True

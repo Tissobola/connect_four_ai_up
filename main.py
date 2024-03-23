@@ -1,8 +1,9 @@
 import board
 import interface
+import heuristic_montecarlo
 import pygame
 import tree
-import astar
+from algorithms import astar
 import play_game
 from board import Board
 
@@ -13,20 +14,20 @@ bot = astar.AStarBot(game_board, 2)
 turn = 0
 collumn = 0
 
-pygame.init()
-game = interface.Board_Interface(6, 7, 100, game_board)
-print(game)
+game_board = board.Board()
+print(game_board)
 
-while (not game.end):
-    if (turn % 2) + 1 == 1:
-     game.move(int(input()), 1)
+while (not game_board.end):
+    if game_board.turn == 'X':
+        game_board.move(int(input()))
+        game_board.change_turn()
     else:
-        bot.play()
-        turn += 1
-        print(game)
+        print('montecarlo')
+        heuristic_montecarlo.play_MCTS(game_board, game_board.turn)
+    game_board.change_turn()
+    print(game_board)
     
-game.run_game()
+game_board.run_game()
 
 
-
-play_game.main(Board(),algorithm1=None,algorithm2=None, GUI=True)
+#play_game.main(Board(),algorithm1=None,algorithm2=None, GUI=True)

@@ -46,10 +46,9 @@ class Board:
         # if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
         #    self.showWinner(symbol)
         #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
-        
         for i in range(len(self.board) -1 , -1, -1): # i = número de linhas
-            if self.board[i][collumn] == self.nullSymbol:
-                self.board[i][collumn] = symbol
+            if self.board[i][collumn-1] == self.nullSymbol:
+                self.board[i][collumn-1] = symbol
                 self.change_turn() # Muda de jogador 
                 if self.checkWinner(symbol, collumn):
                    print("Ganhou")
@@ -63,7 +62,7 @@ class Board:
 
     def checkWinner(self, player, col):
         row = 0
-        while(self.board[row][col]!=player):
+        while(self.board[row][col-1]!=player):
             row += 1
         
         token = player  # assuming player's token is represented by 'X' or 'O'
@@ -81,7 +80,7 @@ class Board:
         # Check vertical
         count = 0
         for r in range(self.rows):
-            if self.board[r][col] == token:
+            if self.board[r][col-1] == token:
                 count += 1
                 if count == 4:
                     return True
