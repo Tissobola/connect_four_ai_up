@@ -62,9 +62,9 @@ def draw_board(game, screen):
 
     if game.end:
         font = pygame.font.Font(None, 64)
-        if game.winner == "X":
+        if game.winner == "O":
             winner_text = font.render("Red wins!", True, colors["RED"])
-        elif game.winner == "O":
+        elif game.winner == "X":
             winner_text = font.render("Blue wins!", True, colors["BLUE"])
         else:
             winner_text = font.render("It's a tie!", True, colors["BLACK"])
@@ -73,7 +73,7 @@ def draw_board(game, screen):
 
         draw_pieces()
         pygame.display.update()
-        pygame.time.delay(2000)
+        pygame.time.delay(4000)
         exit()
     screen.fill(colors["BACKGROUND"])
     pygame.gfxdraw.box(screen, (0, 0, width, square_size), colors["WHITE"])
@@ -154,6 +154,7 @@ def play_game(game):
                     game.move(algorithms_move(game, game.algorithm1))
 
         pygame.display.update()
+    draw_board(game, screen)
     
 
 def algorithm_vs_algorithm(game):
@@ -180,7 +181,6 @@ def algorithm_vs_algorithm(game):
 from algorithms import AStarBot
 
 def algorithms_move(algorithm):
-    # TODO: mudar esta merda
     if algorithm=="astar":
         bot = AStarBot()
         col = bot.bestMove()
