@@ -2,6 +2,7 @@ import pygame
 from interface import *
 from board import *
 import play_game
+import heuristic
 
 class Button:
     def __init__(self, text, width, height, font, text_color, backgroud_color, x_pos, y_pos):
@@ -97,6 +98,12 @@ class Menu:
 
 
     def start_game_interface(self, algorithm):
+        game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
+        game_interface.run_game()
+    
+    def start_game_interface_astar(self):
+        game_board = Board()
+        bot = heuristic.AStarBot(game_board, 2)
         game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
         game_interface.run_game()
     
