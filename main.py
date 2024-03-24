@@ -7,7 +7,7 @@ from algorithms import astar
 import play_game
 from board import Board
 
-# #-------------------------------- GAME --------------------------------
+# -------------------------------- GAME --------------------------------
 game_board = board.Board()
 bot = astar.AStarBot(game_board, 2)
 
@@ -30,4 +30,4 @@ while (not game_board.end):
 game_board.run_game()
 
 
-#play_game.main(Board(),algorithm1=None,algorithm2=None, GUI=True)
+play_game.main(Board(),algorithm1=None,algorithm2=None, GUI=True)
