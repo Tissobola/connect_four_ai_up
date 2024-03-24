@@ -16,7 +16,7 @@ class MonteCarlo_heuristics:
  
     
     def select(self, node, visited):
-        print('SELECT')
+        
         while not node.isLeaf():
             best_ucb1 = float('-inf')
             selected_node = None
@@ -65,7 +65,7 @@ class MonteCarlo_heuristics:
             node = node.parent
             
     def get_best_move(self):
-        iterations = 100000  # Number of MCTS iterations
+        iterations = 100  # Number of MCTS iterations
         visited = set()
         for _ in range(iterations):
             selected_node = self.select(self.tree.root, visited)
@@ -77,8 +77,3 @@ class MonteCarlo_heuristics:
         # After MCTS iterations, select the best move based on statistics
         best_move = max(self.tree.root.children.items(), key=lambda x: x[1].simulations)[0] + 1
         return best_move
-    
-def play_MCTS(board, player):
-    mcts = MonteCarlo_heuristics(board, player)
-    best_move = mcts.get_best_move()
-    return best_move
