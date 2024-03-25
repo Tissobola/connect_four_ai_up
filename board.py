@@ -1,3 +1,5 @@
+import numpy as np
+
 class Board:
     def __init__(self):
         self.cols = 7
@@ -8,6 +10,7 @@ class Board:
         self.p2Symbol = 'O'
         self.populateBoard()
         self.end = False
+        self.winner = None
 
     def __str__(self):
         line = ""
@@ -35,12 +38,13 @@ class Board:
         #    self.showWinner(symbol)
         #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
         for i in range(len(self.board)):
-            if self.board[i][collumn-1] == self.nullSymbol or i == self.rows - 1:
+            if self.board[i][collumn-1] == self.nullSymbol and self.possibleMoves().__contains__(collumn):
                 self.board[i][collumn-1] = symbol
+                if len(self.possibleMoves()) == 0:
+                    self.end = True
                 if self.checkWinner(symbol, (i,collumn-1)):
                     self.showWinner(symbol)
                 return True
-            
         return False
         
     def checkWinner(self, player, last_move):
@@ -93,6 +97,7 @@ class Board:
                     
     def showWinner(self, player):
         self.end = True
+        self.winner = player
         # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
 
     def player(self, player):
@@ -100,3 +105,6 @@ class Board:
             return self.p1Symbol
         elif player == 2:
             return self.p2Symbol
+        
+    def possibleMoves(self):
+        return [col+1 for col in range(7) if self.board[5][col] == self.nullSymbol]

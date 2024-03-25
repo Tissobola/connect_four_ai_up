@@ -1,5 +1,6 @@
 import tree
 import board
+import utils as util
 
 #h(n): minimize the chances of the opponent to win and maximize the chances of the bot to win
 #g(n): uniform cost search minimizes the cost of the path from the root to the current n
@@ -11,7 +12,7 @@ class AStarBot:
         self.player = player    # 1 or 2
 
     def play(self):
-        movesTree = tree.Tree(self.board, self.player)
+        movesTree = tree.AStarTree(self.board, self.player)
         forbiddenMove = []
         while True:
             bestMove = self.bestMove(movesTree, [])
@@ -25,18 +26,14 @@ class AStarBot:
         for i in movesTree.root.children:
             if not forbidenMoves.__contains__(i+1):
                 f = self.f(movesTree.root.children[i])
-                g = self.g(movesTree.root.children[i])
-                h = self.h(movesTree.root.children[i])
-                # print(i+1, f, "=", h, "+", g)
                 if f < bestMove[1]:
-                    # print("esse")
                     bestMove = (i+1, f)
         return bestMove
 
     def f(self, node):
-        return self.h(node) + self.g(node)
+        return self.h(node) + self.g()
 
-    def g(self, node):
+    def g(self):
         return 1
 
     def h(self, node):
@@ -47,10 +44,10 @@ class AStarBot:
         selfConsecutives.append(self.checkDiagonalsUpLeftToRight(currentBoard, self.player))
         selfConsecutives.append(self.checkDiagonalsDownLeftToRight(currentBoard, self.player))
         opponentConsecutives = []
-        opponentConsecutives.append(self.checkRows(currentBoard, self.opponent()))
-        opponentConsecutives.append(self.checkCols(currentBoard, self.opponent()))
-        opponentConsecutives.append(self.checkDiagonalsUpLeftToRight(currentBoard, self.opponent()))
-        opponentConsecutives.append(self.checkDiagonalsDownLeftToRight(currentBoard, self.opponent()))
+        opponentConsecutives.append(self.checkRows(currentBoard, util.opponent(self.player)))
+        opponentConsecutives.append(self.checkCols(currentBoard, util.opponent(self.player)))
+        opponentConsecutives.append(self.checkDiagonalsUpLeftToRight(currentBoard, util.opponent(self.player)))
+        opponentConsecutives.append(self.checkDiagonalsDownLeftToRight(currentBoard, util.opponent(self.player)))
         results = [0, 0, 0, 0]
         for i in range(len(selfConsecutives)):
             for ii in range(len(selfConsecutives)):
@@ -69,7 +66,7 @@ class AStarBot:
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[r][c] != self.board.player(self.opponent()):
+                            if currentBoard[r][c] != self.board.player(util.opponent(self.player)):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
@@ -93,7 +90,7 @@ class AStarBot:
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[r][c] != self.board.player(self.opponent()):
+                            if currentBoard[r][c] != self.board.player(util.opponent(self.player)):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
@@ -119,7 +116,7 @@ class AStarBot:
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[r+s][s] != self.board.player(self.opponent()):
+                            if currentBoard[r+s][s] != self.board.player(util.opponent(self.player)):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
@@ -141,7 +138,7 @@ class AStarBot:
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[s][aux] != self.board.player(self.opponent()):
+                            if currentBoard[s][aux] != self.board.player(util.opponent(self.player)):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
@@ -165,7 +162,7 @@ class AStarBot:
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[s][r-s] != self.board.player(self.opponent()):
+                            if currentBoard[s][r-s] != self.board.player(util.opponent(self.player)):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
@@ -189,7 +186,7 @@ class AStarBot:
                         inSequence = True
                     else:
                         if inSequence:
-                            if currentBoard[s][aux] != self.board.player(self.opponent()):
+                            if currentBoard[s][aux] != self.board.player(util.opponent(self.player)):
                                 if counter == i:
                                     consecutives[i-1] += 1
                         counter = 0
@@ -200,9 +197,3 @@ class AStarBot:
                 counter = 0
                 inSequence = False
         return consecutives
-
-    def opponent(self):
-        if self.player == 1:
-            return 2
-        elif self.player == 2:
-            return 1
