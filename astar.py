@@ -13,22 +13,20 @@ class AStarBot:
 
     def play(self):
         movesTree = tree.AStarTree(self.board, self.player)
-        forbiddenMove = []
-        while True:
-            bestMove = self.bestMove(movesTree, [])
-            if not self.board.move(bestMove[0], self.player):
-                forbiddenMove.append(bestMove[0])
-            else:
-                return True
+        bestMove = self.bestMove(movesTree)
+        self.board.move(bestMove, self.player)
 
-    def bestMove(self, movesTree, forbidenMoves):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
+    def bestMove(self, movesTree):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
         bestMove = (4, self.f(movesTree.root.children[3]))
         for i in movesTree.root.children:
-            if not forbidenMoves.__contains__(i+1):
-                f = self.f(movesTree.root.children[i])
-                if f < bestMove[1]:
-                    bestMove = (i+1, f)
-        return bestMove
+            f = self.f(movesTree.root.children[i])
+            g = self.g()
+            h = self.h(movesTree.root.children[i])
+            print(i, f, "=", h, "+", g)
+            if f < bestMove[1]:
+                print("esse")
+                bestMove = (i+1, f)
+        return bestMove[0]
 
     def f(self, node):
         return self.h(node) + self.g()
@@ -37,7 +35,7 @@ class AStarBot:
         return 1
 
     def h(self, node):
-        currentBoard = node.value
+        currentBoard = node.value.board
         selfConsecutives = []
         selfConsecutives.append(self.checkRows(currentBoard, self.player))
         selfConsecutives.append(self.checkCols(currentBoard, self.player))
