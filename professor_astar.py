@@ -12,80 +12,79 @@ class AStarBot:
         self.player = player    # 1 or 2
 
     def play(self):
-        best_f = float('inf')
-        node = tree.Node_astar(self.board, {})
-   
-        self.get_successors(node)
-        for col in node.children:
-            f_value = self.f()
-            if f_value < best_f:
-                best_f = f_value
-                a_star_col = col
-        node.value.move(a_star_col, node.value.turn)
-        
-    def get_successors(self, node):
-        matrix = node.value
-        for i in range (matrix.cols):
-            if matrix.move(i + 1, node.value.turn):
-                node.children[i] = matrix.move(i + 1, node.value.turn)
-        
+        movesTree = tree.AStarTree(self.board, self.player)
+        forbiddenMove = []
+        while True:
+            bestMove = self.bestMove(movesTree, [])
+            if not self.board.move(bestMove[0], self.player):
+                forbiddenMove.append(bestMove[0])
+            else:
+                return True
 
-
-    
-
-    def f(self):
-        return self.h() + self.g()
+    def bestMove(self, movesTree, forbidenMoves):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
+        bestMove = (1, self.f(movesTree.root.children[0]))
+        for i in movesTree.root.children:
+            if not forbidenMoves.__contains__(i+1):
+                print(f'children {i}:\n {movesTree.root.children[i].value}')
+                f = self.f(movesTree.root.children[i])
+                print(f'pontuacao:{f}')
+                if f < bestMove[1]:
+                    bestMove = (i+1, f)
+        return bestMove
+ 
+    def f(self, node):
+        return self.h(node) + self.g()
 
     def g(self):
         return 1
     
-  
-    def h(self):
-        def evaluate_segment(segm):
-            if self.winner == "X":
-                return 512
-            elif self.winner == "O":
-                return -512
-
-            elif "O" in segm and "X" not in segm:
-                if segm.count("O") == 3:
-                    return -50
-                elif segm.count("O") == 2:
-                    return -10
-                elif segm.count("O") == 1:
-                    return -1
-            elif segm.count("-") == 4:
-                return 0
-            elif "X" in segm and "O" not in segm:
-                if segm.count("X") == 1:
-                    return 1
-                elif segm.count("X") == 2:
-                    return 10
-                elif segm.count("X") == 3:
-                    return 50
+    def evaluate_segment(self, segment):
+        count_x = segment.count('X')
+        count_o = segment.count('O')
+        if count_o == 3 and count_x == 0:
+            return -50
+        elif count_o == 2 and count_x == 0:
+            return -10
+        elif count_o == 1 and count_x == 0:
+            return -1
+        elif count_x == 1 and count_o == 0:
+            return 1
+        elif count_x == 2 and count_o == 0:
+            return 10
+        elif count_x == 3 and count_o == 0:
+            return 50
+        elif count_x == 4:
+            return 512
+        elif count_o == 4:
+            return -512
+        else:
             return 0
 
-        # Evaluate all possible straight segments
-        self.score = 0
-        for i in range(6):
-            for j in range(4):
-                if j + 3 < 7:  # check if the indices are within range
-                    segment = [self.board[i][j + k] for k in range(4)]
-                    self.score += evaluate_segment(segment)
-        for i in range(4):
-            for j in range(7):
-                if i + 3 < 6:  # check if the indices are within range
-                    segment = [self.board[i + k][j] for k in range(4)]
-                    self.score += evaluate_segment(segment)
-        for i in range(3):
-            for j in range(4):
-                if i + 3 < 6 and j + 3 < 7:  # check if the indices are within range
-                    segment = [self.board[i + k][j + k] for k in range(4)]
-                    self.score += evaluate_segment(segment)
-        for i in range(3):
-            for j in range(3, 7):
-                if i + 3 < 6 and j - 3 >= 0:  # check if the indices are within range
-                    segment = [self.board[i + k][j - k] for k in range(4)]
-                    self.score += evaluate_segment(segment)
+    def h(self, node):
+        score = 0
+        # Count occurrences of 'X' and 'O' in the node
+        for i in range(self.board.rows):
+            for j in range(self.board.cols):        
+                # Horizontal segments
+                if j <= self.board.cols - 4:
+                    segment = [node.value[i][j+k] for k in range(4)]
+                    score += self.evaluate_segment(segment)
+                    
+                # Vertical segments
+                if i <= self.board.rows - 4:
+                    segment = [node.value[i+k][j] for k in range(4)]
+                    score += self.evaluate_segment(segment)
 
-        return self.score
+                # Diagonal segments (top-left to bottom-right)
+                if i <= self.board.rows - 4 and j <= self.board.cols - 4:
+                    segment = [node.value[i+k][j+k] for k in range(4)]
+                    score += self.evaluate_segment(segment)
+
+                # Diagonal segments (bottom-left to top-right)
+                if i >= 3 and j <= self.board.cols - 4:
+                    segment = [node.value[i-k][j+k] for k in range(4)]
+                    score += self.evaluate_segment(segment)
+        return score
+
+        
+            # Add move bonus

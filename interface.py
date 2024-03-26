@@ -94,7 +94,6 @@ def input_column():
             column = int(column)
             if 1 <= column <= collumn_count:
                 return column - 1
-        print("Invalid column")
 
 def play_on_terminal(game, verbose=True):
     while True:

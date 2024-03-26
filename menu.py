@@ -73,8 +73,6 @@ class Menu:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if self.player_vs_player_button.collide_point(pygame.mouse.get_pos()):
                             self.start_game_interface()
-                        elif self.astar_button.collide_point(pygame.mouse.get_pos()):
-                            self.start_game_interface_astart()
                         
                             
                 
@@ -90,10 +88,8 @@ class Menu:
 
 
     def start_game_interface(self):
-        play_game()
-    def start_game_interface_astar(self):
-        game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
-        game_interface.run_game()
+        main(self.game_board, algorithm1=None, algorithm2=None, GUI= True)
+    
     
 
 
