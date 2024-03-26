@@ -54,7 +54,7 @@ class Node:
 class AStarTree:
     def __init__(self, board, player):              # player is 1 or 2, board is a board object
         self.player = player                        # 1 or 2
-        self.root = Node(board.board, {})           # root node with the matrix of the board as its value
+        self.root = Node_astar(board.board, {})           # root node with the matrix of the board as its value
         children = self.genChildren(self.root)      # new board matrixes made with different possible moves for the player
         self.root.setChildren(children)             # set the new board matrixes as children of the root
         
@@ -67,7 +67,7 @@ class AStarTree:
             temporaryBoard = board.Board()
             temporaryBoard.board = np.copy(node.value)
             temporaryBoard.move(i+1, self.player)
-            children[i] = Node(np.copy(temporaryBoard.board), {})
+            children[i] = Node_astar(np.copy(temporaryBoard.board), {})
         return children
     
 class MCTree():
@@ -75,3 +75,24 @@ class MCTree():
         self.player = player                        # 1 or 2
         self.root = Node(board, {}, None)           # root node with the board object as its value
         # self.root.genChildren(player)
+        
+class Node_astar:
+    def __init__(self, value, children):
+        self.value = value      # is a matrix of the board in AStarTree and is a Board object in MCTree
+        self.children = children    # is a dictionary {0: node, 1: node, ...}
+        # is another node
+        
+        #Monte Carlo
+        self.wins = 0
+        self.visits = 0
+        
+    def setValue(self, value):
+        self.value = value
+        
+    def setChildren(self, children):
+        self.children = children
+        
+    def getChild(self, child):
+        return self.children[child]
+        
+    

@@ -90,9 +90,7 @@ class Menu:
 
 
     def start_game_interface(self):
-        game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
-        game_interface.run_game()
-    
+        play_game()
     def start_game_interface_astar(self):
         game_interface = Board_Interface (self.game_board.rows, self.game_board.cols, 100, self.game_board)
         game_interface.run_game()

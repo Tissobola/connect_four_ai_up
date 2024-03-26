@@ -11,7 +11,11 @@ class Board:
         self.populateBoard()
         self.end = False
         self.winner = None
-
+        self.turn = 1
+        self.algorithm1 = None 
+        self.algorithm2 = None 
+        
+        
     def __str__(self):
         line = ""
         result = ""
@@ -40,10 +44,12 @@ class Board:
         for i in range(len(self.board)):
             if self.board[i][collumn-1] == self.nullSymbol and self.possibleMoves().__contains__(collumn):
                 self.board[i][collumn-1] = symbol
+                self.change_player()
                 if len(self.possibleMoves()) == 0:
                     self.end = True
                 if self.checkWinner(symbol, (i,collumn-1)):
                     self.showWinner(symbol)
+                    print("SIGA PARA A PROXIMA")
                 return True
         return False
         
@@ -105,6 +111,13 @@ class Board:
             return self.p1Symbol
         elif player == 2:
             return self.p2Symbol
+        
+    def change_player(self):
+        if self.turn == 1:
+            self.turn = 2
+        elif self.turn == 2:
+            self.turn = 1 
+        
         
     def possibleMoves(self):
         return [col+1 for col in range(7) if self.board[5][col] == self.nullSymbol]
