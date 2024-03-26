@@ -162,7 +162,7 @@ def play_game(game):
             column = pos[0] // square_size
             if game.move(column + 1, game.turn):
                 if not game.end and game.algorithm1 is not None:
-                    game.move(algorithms_move(game, game.algorithm1))
+                    algorithms_move(game, game.algorithm1)
 
         pygame.display.update()
     draw_board(game, screen)
@@ -182,30 +182,32 @@ def algorithm_vs_algorithm(game):
         if event.type == pygame.QUIT:
             exit()
         if game.turn == 1:
-            game.move(algorithms_move(game, game.algorithm1))
+            algorithms_move(game, game.algorithm1)
         else:
-            game.move(algorithms_move(game, game.algorithm2))
+            algorithms_move(game, game.algorithm2)
         pygame.time.delay(500)
         pygame.display.update()
 
 
-import astar
+import nosso_astar
 import mcts
+import professor_astar
 
 
 def algorithms_move(game_board,algorithm):
     print('entrou')
-    if algorithm=="astar":
-        bot = astar.AStarBot(game_board, 2)
-        col = bot.bestMove()
+    if algorithm=="astar_h1":
+        bot = nosso_astar.AStarBot(game_board, 2)
+        bot.play()
+    elif algorithm=="astar_h2":
+        bot = professor_astar.AStarBot(game_board, 2)
+        bot.play()
     elif algorithm=="montecarlo":
         bot = mcts.MonteCarlo2(game_board, 2)
-        col = bot.play()
+        bot.play()
     elif algorithm=="minimax":
-        col = 5
         pass
   
-    return col
 
 def main(game, algorithm1, algorithm2, GUI):
     game.algorithm1 = algorithm1
@@ -221,4 +223,4 @@ def main(game, algorithm1, algorithm2, GUI):
                     play_game(game)
         else:
             play_game(game)
-         
+            
