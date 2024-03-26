@@ -28,7 +28,10 @@ class AStarBot:
                 f = self.f(movesTree.root.children[i])
                 if f < bestMove[1]:
                     bestMove = (i+1, f)
+        print(bestMove)
         return bestMove
+    
+    print(bestMove)
 
     def f(self, node):
         return self.h(node) + self.g()
