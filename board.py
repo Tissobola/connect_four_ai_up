@@ -49,7 +49,6 @@ class Board:
                     self.end = True
                 if self.checkWinner(symbol, (i,collumn-1)):
                     self.showWinner(symbol)
-                    print(f"Vencedor : {self.winner}")
                 return True
         return False
         

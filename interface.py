@@ -163,7 +163,7 @@ def play_game(game):
             if game.move(column + 1, game.turn):
                 if not game.end and game.algorithm1 is not None:
                     algorithms_move(game, game.algorithm1)
-                    algorithms_move(game, game.algorithm1)
+                    
 
         pygame.display.update()
     draw_board(game, screen)
@@ -196,7 +196,6 @@ import professor_astar
 
 
 def algorithms_move(game_board,algorithm):
-    print('entrou')
     if algorithm=="astar_h1":
         bot = nosso_astar.AStarBot(game_board, 2)
         bot.play()

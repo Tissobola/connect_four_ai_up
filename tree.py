@@ -41,6 +41,7 @@ class Node:
             temporaryBoard.board = np.copy(self.value.board)
             temporaryBoard.move(i, player)
             children[i] = Node(temporaryBoard, {}, self)
+            print(f"children {i} = {children[i]}")
         self.setChildren(children)
     
     def nodeHeight(self):
