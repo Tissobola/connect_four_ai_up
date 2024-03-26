@@ -1,7 +1,7 @@
 import pygame
 from astar import AStarBot
 import sys
-from board import *
+from board_old import *
 
 
 # Class to create the game pieces 

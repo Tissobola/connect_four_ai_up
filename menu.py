@@ -1,6 +1,6 @@
 import pygame 
 from interface import *
-from board import *
+from board_old import *
 import play_game
 import heuristic
 

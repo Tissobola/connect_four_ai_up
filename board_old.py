@@ -26,22 +26,6 @@ class Board:
             line = ""
         return result
     
-    def populateBoard(self):
-        aux = []
-        for i in range(self.cols):
-            aux.append(self.nullSymbol)
-        for i in range(self.rows):
-            self.board.append(aux.copy())
-    
-    def change_turn(self): # Muda de jogador 
-        if self.turn == self.p1Symbol:
-            # print("current_player = ", self.turn)
-            self.turn = self.p2Symbol
-        elif self.turn == self.p2Symbol:
-            # print("current player = ", self.turn)
-            self.turn = self.p1Symbol
-        return self.turn
-    
     def update_score(self):
         def evaluate_segment(segm):
             if self.winner == "X":
@@ -91,29 +75,114 @@ class Board:
                     self.score += evaluate_segment(segment)
 
         return self.score
-    
-
-
-    def genChildren(self):
+        
+    def get_successors(self):
         children = {}
         for i in range(self.cols):
-            temporaryBoard = self.copyBoard()
-            if temporaryBoard.move(i+1):
-                children[i] = temporaryBoard
+            new_board = self.copyBoard()
+            #print("NEW BOARD = ", new_board)
+            if new_board.move(i):
+                #print(f"MOVE {i}")
+                #print(new_board)
+                children[i] = new_board
+                print(f"SUCCESSOR {i} = ", children[i])
         return children
-    
 
-    
     def copyBoard(self):
-        result = Board()
-        for row in range(self.rows):
-            result_row = []
-            for col in range(self.cols):
-                result_row.append(self.board[row][col])  
-            result.append(result_row) 
-        return result
+        return Board(board=copy.deepcopy(self.board),
+                        rows=copy.deepcopy(self.rows),
+                        cols=copy.deepcopy(self.cols),
+                        nullSymbol=copy.deepcopy(self.nullSymbol),
+                        p1Symbol=copy.deepcopy(self.p1Symbol),
+                        p2Symbol=copy.deepcopy(self.p2Symbol),
+                        algorithm1=copy.deepcopy(self.algorithm1),
+                        algorithm2=copy.deepcopy(self.algorithm2),
+                        score=copy.deepcopy(self.score),
+                        winner = copy.deepcopy(self.winner), 
+                        end = copy.deepcopy(self.end))
+
+
+
+    def populateBoard(self):
+        aux = []
+        for i in range(self.cols):
+            aux.append(self.nullSymbol)
+        for i in range(self.rows):
+            self.board.append(aux.copy())
+
+    # def populateBoard(self):
+    #     for i in range(self.rows):
+    #         aux = [self.nullSymbol] * self.cols
+    #         self.board.append(aux)
+    
+    def change_turn(self): # Muda de jogador 
+        if self.turn == self.p1Symbol:
+            # print("current_player = ", self.turn)
+            self.turn = self.p2Symbol
+        elif self.turn == self.p2Symbol:
+            # print("current player = ", self.turn)
+            self.turn = self.p1Symbol
+        return self.turn
     
 
+    def full_column(self, column):
+        for i in range(6):
+            if self.board[i][column] == ".":
+                return False
+        return True
+
+    def move(self, column):
+        
+        if (0 <= column - 1 <= 6) and not self.full_column(column):
+            for i in range(5, -1, -1):
+                if self.board[i][column-1] == ".":
+                    self.board[i][column-1]=self.turn
+
+
+                    self.update_score()
+                    if self.checkWinner(self.turn, column-1):
+                        self.end = True
+                    self.change_turn()
+                    
+                    return True
+        return False
+
+
+
+
+    
+
+    # def move(self, collumn):
+    #     return self.addToCollumn(collumn, self.turn)
+            
+    # def addToCollumn(self, collumn, symbol):
+
+    #     #self.board[self.rowTops[collumn]][collumn] = symbol
+    #     # if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
+    #     #    self.showWinner(symbol)
+    #     #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
+    #     for i in range(len(self.board) -1 , -1, -1): # i = número de linhas
+    #         if self.board[i][collumn-1] == self.nullSymbol:
+    #             self.board[i][collumn-1] = symbol
+    #             self.update_score()
+    #             if self.checkWinner(symbol, collumn-1):
+    #                print("Ganhou")
+    #                self.winner=self.turn
+    #                self.end = True
+    #             self.change_turn() # Muda de jogador
+    #             return True
+    #     return False
+
+    # def checkWinner(self):
+    #     if self.score == 512: 
+    #         self.winner = 'X'
+    #         self.end = True
+    #     elif self.score == -512:
+    #         self.winner = 'O'
+    #         self.end = True
+    #     else: 
+    #         return self.end
+        
     def checkWinner(self, player, col):
         row = 0
     
@@ -171,25 +240,8 @@ class Board:
                     count = 0
 
         return False
-    
-
-    def move(self, collumn):
-        return self.addToCollumn(collumn, self.turn)
-            
-    def addToCollumn(self, collumn, symbol):
-
-        #self.board[self.rowTops[collumn]][collumn] = symbol
-        # if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
-        #    self.showWinner(symbol)
-        #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
-        for i in range(len(self.board) -1 , -1, -1): # i = número de linhas
-            if self.board[i][collumn-1] == self.nullSymbol:
-                self.board[i][collumn-1] = symbol
-                self.change_turn() # Muda de jogador 
-                if self.checkWinner(symbol, collumn):
-                   print("Ganhou")
-                
-                   self.winner=self.turn
-                   self.end = True
-                return True
-        return False
+                    
+    '''def showWinner(self, player):
+        self.end = True
+        # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
+    '''

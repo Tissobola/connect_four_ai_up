@@ -1,5 +1,5 @@
 import tree
-import board
+import board_old
 
 class Node_MTCS:
     def __init__(self, board, parent=None):

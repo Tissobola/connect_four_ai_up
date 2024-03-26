@@ -1,6 +1,6 @@
 
 import tree
-import board
+import board_old
 import math
 import random
 
@@ -33,7 +33,7 @@ class MonteCarlo_heuristics:
         return children 
     
     def simulate(self, node):
-        temp_board = board.Board()
+        temp_board = board_old.Board()
         temp_board.board = node.value
         while not temp_board.end:
             random_move = random.randint(1, temp_board.cols)

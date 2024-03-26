@@ -3,6 +3,7 @@ import contextlib
 with contextlib.redirect_stdout(None):
     import pygame
     import pygame.gfxdraw
+import tree
 
 
 collumn_count = 7
@@ -31,7 +32,7 @@ def draw_hover_piece(screen, current_player, column, piece_surface):
     else:
         color = colors["BLUE"]
 
-    center_x = (column * square_size) + (square_size // 2)
+    center_x = (column -1 * square_size) + (square_size // 2)
     center_y = square_size // 2
 
     piece_surface.fill((0, 0, 0, 0))
@@ -61,8 +62,11 @@ def draw_board(game, screen):
                     draw(colors["RED"])
                 elif game.board[r][c] == "O":
                     draw(colors["BLUE"])
+    
+    
 
     if game.end:
+        print("entrou")
        
         font = pygame.font.Font(None, 64)
         if game.winner == "O":
@@ -136,7 +140,6 @@ def play_on_terminal(game, verbose=True):
                     game.move(algorithms_move(game, game.algorithm2))
 
 def play_game(game):
-    print(game.end)
     pygame.init()
     clock = pygame.time.Clock()
     clock.tick(60)
@@ -158,7 +161,8 @@ def play_game(game):
             column = pos[0] // square_size
             if game.move(column):
                 if not game.end and game.algorithm1 is not None:
-                    game.move(algorithms_move(game, game.algorithm1))
+                    pass
+                #game.move(algorithms_move(game.algorithm1, game, game.turn, movesTree, forbiddenMoves))
 
         pygame.display.update()
     draw_board(game, screen)
@@ -184,22 +188,14 @@ def algorithm_vs_algorithm(game):
         pygame.time.delay(500)
         pygame.display.update()
 
-
-from algorithms import AStarBot
-
-def algorithms_move(algorithm):
+def algorithms_move(algorithm, board, player, movesTree, forbidenMoves):
     if algorithm=="astar":
-        bot = AStarBot()
-        col = bot.bestMove()
         pass
     elif algorithm=="montecarlo":
-        col = 5
         pass
     elif algorithm=="minimax":
-        col = 5
         pass
-
-    return col
+    return
 
 def main(game, algorithm1, algorithm2, GUI):
     game.algorithm1 = algorithm1
@@ -207,7 +203,7 @@ def main(game, algorithm1, algorithm2, GUI):
 
     if not GUI:
         play_on_terminal(game)
-    else:
+    else: # play on interface
         if game.algorithm1 is not None:
                 if game.algorithm2 is not None:
                     algorithm_vs_algorithm(game)
