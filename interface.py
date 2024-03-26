@@ -162,7 +162,7 @@ def play_game(game):
             column = pos[0] // square_size
             if game.move(column + 1, game.turn):
                 if not game.end and game.algorithm1 is not None:
-                    game.move(algorithms_move(game, game.algorithm1))
+                    algorithms_move(game, game.algorithm1)
 
         pygame.display.update()
     draw_board(game, screen)
@@ -193,11 +193,11 @@ import astar
 import mcts
 
 
-def algorithms_move(game_board,algorithm):
-    print('entrou')
+def algorithms_move(game_board, algorithm):
+    
     if algorithm=="astar":
         bot = astar.AStarBot(game_board, 2)
-        col = bot.bestMove()
+        bot.play()
     elif algorithm=="montecarlo":
         bot = mcts.MonteCarlo2(game_board, 2)
         col = bot.play()
@@ -205,10 +205,11 @@ def algorithms_move(game_board,algorithm):
         col = 5
         pass
   
-    return col
+    
 
 def main(game, algorithm1, algorithm2, GUI):
     game.algorithm1 = algorithm1
+   
     game.algorithm2 = algorithm2
 
     if not GUI:
@@ -221,4 +222,3 @@ def main(game, algorithm1, algorithm2, GUI):
                     play_game(game)
         else:
             play_game(game)
-         

@@ -38,4 +38,4 @@ import interface
 #interface.main(game_board, algorithm1=None, algorithm2=None, GUI= True)
 
 #player vs astar1
-interface.main(game_board, algorithm1=astar, algorithm2=None, GUI= True)
+interface.main(game_board, 'astar', algorithm2=None, GUI= True)
