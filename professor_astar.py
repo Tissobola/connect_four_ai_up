@@ -22,16 +22,16 @@ class AStarBot:
                 return True
 
     def bestMove(self, movesTree, forbidenMoves):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
-        bestMove = (4, self.f(movesTree.root.children[3]))
+        bestMove = (1, self.f(movesTree.root.children[0]))
         for i in movesTree.root.children:
             if not forbidenMoves.__contains__(i+1):
+                print(f'children {i}:\n {movesTree.root.children[i].value}')
                 f = self.f(movesTree.root.children[i])
+                print(f'pontuacao:{f}')
                 if f < bestMove[1]:
                     bestMove = (i+1, f)
         return bestMove
-    
-    print(bestMove)
-
+ 
     def f(self, node):
         return self.h(node) + self.g()
 
@@ -53,74 +53,38 @@ class AStarBot:
             return 10
         elif count_x == 3 and count_o == 0:
             return 50
+        elif count_x == 4:
+            return 512
+        elif count_o == 4:
+            return -512
         else:
             return 0
 
     def h(self, node):
-        count_x = 0
-        count_o = 0
+        score = 0
         # Count occurrences of 'X' and 'O' in the node
         for i in range(self.board.rows):
-            for j in range(self.board.cols):
-            
-
+            for j in range(self.board.cols):        
                 # Horizontal segments
                 if j <= self.board.cols - 4:
                     segment = [node.value[i][j+k] for k in range(4)]
-                    count_x += segment.count('X')
-                    count_o += segment.count('O')
-
+                    score += self.evaluate_segment(segment)
+                    
                 # Vertical segments
                 if i <= self.board.rows - 4:
                     segment = [node.value[i+k][j] for k in range(4)]
-                    count_x += segment.count('X')
-                    count_o += segment.count('O')
+                    score += self.evaluate_segment(segment)
 
                 # Diagonal segments (top-left to bottom-right)
                 if i <= self.board.rows - 4 and j <= self.board.cols - 4:
                     segment = [node.value[i+k][j+k] for k in range(4)]
-                    count_x += segment.count('X')
-                    count_o += segment.count('O')
+                    score += self.evaluate_segment(segment)
 
                 # Diagonal segments (bottom-left to top-right)
                 if i >= 3 and j <= self.board.cols - 4:
                     segment = [node.value[i-k][j+k] for k in range(4)]
-                    count_x += segment.count('X')
-                    count_o += segment.count('O')
-
-        if count_x == 4:  # 'X' wins
-            return 512
-        elif count_o == 4:  # 'O' wins
-            return -512
-        else:
-            # Evaluate segments
-            score = 0
-            for i in range(self.board.rows):
-                for j in range(self.board.cols):
-                    
-                    # Horizontal segments
-                    if j <= self.board.cols - 4:
-                        segment = [node.value[i][j+k] for k in range(4)]
-                        score += self.evaluate_segment(segment)
-
-                    # Vertical segments
-                    if i <= self.board.rows - 4:
-                        segment = [node.value[i+k][j] for k in range(4)]
-                        score += self.evaluate_segment(segment)
-
-                    # Diagonal segments (top-left to bottom-right)
-                    if i <= self.board.rows - 4 and j <= self.board.cols - 4:
-                        segment = [node.value[i+k][j+k] for k in range(4)]
-                        score += self.evaluate_segment(segment)
-
-                    # Diagonal segments (bottom-left to top-right)
-                    if i >= 3 and j <= self.board.cols - 4:
-                        segment = [node.value[i-k][j+k] for k in range(4)]
-                        score += self.evaluate_segment(segment)
-
-            # Add move bonus
-            if self.player == 'X':
-                score += 16
-            else:
-                score -= 16
+                    score += self.evaluate_segment(segment)
         return score
+
+        
+            # Add move bonus

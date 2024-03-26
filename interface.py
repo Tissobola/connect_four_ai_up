@@ -94,7 +94,6 @@ def input_column():
             column = int(column)
             if 1 <= column <= collumn_count:
                 return column - 1
-        print("Invalid column")
 
 def play_on_terminal(game, verbose=True):
     while True:
@@ -195,7 +194,6 @@ import professor_astar
 
 
 def algorithms_move(game_board,algorithm):
-    print('entrou')
     if algorithm=="astar_h1":
         bot = nosso_astar.AStarBot(game_board, 2)
         bot.play()
