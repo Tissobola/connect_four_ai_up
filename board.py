@@ -15,7 +15,7 @@ class Board:
     def __str__(self):
         line = ""
         result = ""
-        for i in range(5, -1, -1):
+        for i in range(self.rows-1, -1, -1):
             for ii in range(self.cols):
                 line += self.board[i][ii]
             result += line + "\n"
@@ -40,14 +40,14 @@ class Board:
         for i in range(len(self.board)):
             if self.board[i][collumn-1] == self.nullSymbol and self.possibleMoves().__contains__(collumn):
                 self.board[i][collumn-1] = self.player(player)
-                if len(self.possibleMoves()) == 0:
-                    self.end = True
                 if self.checkWinner(self.player(player), (i,collumn-1)):
                     self.showWinner(player)
                 return True
         return False
         
     def checkWinner(self, player, last_move):
+        if len(self.possibleMoves()) == 0:
+            self.end = True
         row, col = last_move
         token = player  # assuming player's token is represented by 'X' or 'O'
 
@@ -97,7 +97,8 @@ class Board:
                     
     def showWinner(self, player):
         self.end = True
-        self.winner = player
+        if self.winner == None:
+            self.winner = player
         # print("\n\nPLAYER "+str(self.player(player))+" WINS!\n"+str(self))
 
     def player(self, player):
@@ -107,4 +108,4 @@ class Board:
             return self.p2Symbol
         
     def possibleMoves(self):
-        return [col+1 for col in range(7) if self.board[5][col] == self.nullSymbol]
+        return [col+1 for col in range(self.cols) if self.board[self.rows-1][col] == self.nullSymbol]

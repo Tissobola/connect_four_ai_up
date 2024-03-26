@@ -8,8 +8,8 @@ class MonteCarlo:
     def __init__(self, state, player):
         self.tree = tree.MCTree(state, player)      # tree based on the board object
         self.player = player    # 1 or 2
-        self.board = state  # Board object
-        self.simulations = 1000
+        self.state = state  # Board object
+        self.simulations = 100
         self.c = np.sqrt(2)
     
     def selection(self):
@@ -35,7 +35,7 @@ class MonteCarlo:
         ucb1 = 0
         if not node.getChild(move).visits == 0 :
             exploitation = node.getChild(move).wins / node.getChild(move).visits
-            exploration = np.sqrt(2*np.log(node.visits) / node.getChild(move).visits)
+            exploration = np.sqrt(np.log(node.visits) / node.getChild(move).visits)
             ucb1 = exploitation + self.c * exploration
         return ucb1
 
@@ -72,19 +72,24 @@ class MonteCarlo:
             return self.backPropagation(node.parent, won)
         
     def play(self):
-        self.tree = tree.MCTree(self.board, self.player)      # tree based on the board object
-        for i in range(self.simulations):
+        self.tree = tree.MCTree(self.state, self.player)      # tree based on the board object
+        for _ in range(self.simulations):
             node = self.selection()
             self.expansion(node)
             for child in node.children:
-                node.getChild(child).visit()
-                tempNode = node.getChild(child).copy()
-                won = self.simulation(tempNode)
-                
-                if won: node.getChild(child).win()
-                
+                childNode = node.getChild(child)
+                childNode.visit()
+                if childNode.value.winner != self.player:
+                    tempNode = childNode.copy()
+                    won = self.simulation(tempNode)
+                    if won: childNode.win()
+                else:
+                    childNode.win()
+                    won = True
                 self.backPropagation(node.getChild(child), won)
+        best = self.bestMove(self.tree.root)
+                
         # print(self.tree)
-        # print("Best move:", self.bestMove(self.tree.root))
-        self.tree.root.value.move(self.bestMove(self.tree.root), self.player)
-        return
+        # print("Best move:", best)
+        
+        self.state.move(best, self.player)

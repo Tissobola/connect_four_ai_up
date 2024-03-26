@@ -9,8 +9,8 @@ import mcts
 
 #-------------------------------- GAME --------------------------------
 game_board = board.Board()
-bot = astar.AStarBot(game_board, 2)
-# bot = mcts.MonteCarlo(game_board, 2)
+# bot = astar.AStarBot(game_board, 2)
+bot = mcts.MonteCarlo(game_board, 2)
 
 turn = 0
 collumn = 0

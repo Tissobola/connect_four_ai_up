@@ -39,7 +39,10 @@ class Node:
         for i in self.value.possibleMoves():
             temporaryBoard = board.Board()
             temporaryBoard.board = np.copy(self.value.board)
+            temporaryBoard.winner = self.value.winner
+            temporaryBoard.end = self.value.end
             temporaryBoard.move(i, player)
+            
             children[i] = Node(temporaryBoard, {}, self)
         self.setChildren(children)
     
@@ -61,7 +64,11 @@ class Node:
         for child in self.children:
             childrenCopy[child] = self.getChild(child).copy()
         
-        return Node(boardCopy, childrenCopy, self.parent)
+        node = Node(boardCopy, childrenCopy, self.parent)
+        node.wins = self.wins
+        node.visits = self.visits
+        
+        return node
         
 
 class AStarTree:
@@ -79,5 +86,5 @@ class MCTree():
     def __str__(self):
         result = ''
         for child in self.root.children:
-            result += str(child) + ": " + str(self.root.getChild(child).wins) + "/" + str(self.root.getChild(child).visits) + "\n"
+            result += str(child) + ": " + str(self.root.getChild(child).wins) + "/" + str(self.root.getChild(child).visits) + " Winner: " + str(self.root.getChild(child).value.winner) + "\n"
         return result
