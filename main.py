@@ -10,7 +10,7 @@ import mcts
 #-------------------------------- GAME --------------------------------
 game_board = board.Board()
 # bot = astar.AStarBot(game_board, 2)
-bot = mcts.MonteCarlo2(game_board, 2)
+bot = mcts.MonteCarlo(game_board, 2)
 
 turn = 0
 collumn = 0
@@ -39,13 +39,13 @@ import interface
 #interface.main(game_board, algorithm1=None, algorithm2=None, GUI= True)
 
 #player vs astar-nossa
-#interface.main(game_board, algorithm1='astar_h1', algorithm2=None, GUI= True)
+interface.main(game_board, algorithm1='astar_h1', algorithm2=None, GUI= True)
 
 #player vs montecarlo
 #interface.main(game_board, algorithm1='montecarlo', algorithm2=None, GUI= True)
 
 #player vs astar-professor 
-interface.main(game_board, algorithm1='astar_h2', algorithm2=None, GUI= True)
+#interface.main(game_board, algorithm1='astar_h2', algorithm2=None, GUI= True)
 
 #astar_h1 vs astar_h2
 #interface.main(game_board, algorithm1='astar_h1', algorithm2='astar_h2', GUI= True)

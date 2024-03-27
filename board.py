@@ -44,11 +44,11 @@ class Board:
         for i in range(len(self.board)):
             if self.board[i][collumn-1] == self.nullSymbol and self.possibleMoves().__contains__(collumn):
                 #self.board[i][collumn-1] = self.player(player)
-                self.board[i][collumn-1] = symbol
+                self.board[i][collumn-1] = self.player(player)
                 if len(self.possibleMoves()) == 0:
                     self.end = True
-                if self.checkWinner(symbol, (i,collumn-1)):
-                    self.showWinner(symbol)
+                if self.checkWinner(self.player(player), (i,collumn-1)):
+                    self.showWinner(self.player(player))
                 return True
         return False
         
