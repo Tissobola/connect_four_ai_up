@@ -35,6 +35,7 @@ class Board:
 
     def move(self, collumn, player):
         return self.addToCollumn(collumn, player)
+        
             
     def addToCollumn(self, collumn, player):
         #self.board[self.rowTops[collumn]][collumn] = symbol
@@ -43,12 +44,11 @@ class Board:
         #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
         for i in range(len(self.board)):
             if self.board[i][collumn-1] == self.nullSymbol and self.possibleMoves().__contains__(collumn):
-                #self.board[i][collumn-1] = self.player(player)
                 self.board[i][collumn-1] = self.player(player)
                 if len(self.possibleMoves()) == 0:
                     self.end = True
                 if self.checkWinner(self.player(player), (i,collumn-1)):
-                    self.showWinner(self.player(player))
+                    self.showWinner(self.player(player))      
                 return True
         return False
         

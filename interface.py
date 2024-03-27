@@ -15,6 +15,7 @@ square_size = 100
 width = collumn_count * square_size 
 height = (row_count + 1) * square_size
 
+
 colors = {
     "BLUE": (0, 0, 255),
     "BLACK": (0, 0, 0),
@@ -154,8 +155,7 @@ def play_game(game):
             exit()
         if event.type == pygame.MOUSEMOTION:
             draw_hover_piece(screen, game.player(game.turn), pygame.mouse.get_pos()[0] // square_size,
-                             pygame.Surface((square_size, square_size), pygame.SRCALPHA))
-            
+                             pygame.Surface((square_size, square_size), pygame.SRCALPHA))     
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             column = pos[0] // square_size
@@ -180,17 +180,35 @@ def algorithm_vs_algorithm(game):
         event = pygame.event.wait()
         if event.type == pygame.QUIT:
             exit()
+            
+        print(game.turn)
         if game.turn == 1:
             algorithms_move(game, game.algorithm1)
-        else:
-            algorithms_move(game, game.algorithm2)
-        pygame.time.delay(500)
+            
+        elif game.turn == 2:
+            algorithms_vs_algorithms_move(game, game.algorithm2)
+        game.change_player()
+        pygame.time.delay(100)
         pygame.display.update()
 
 
 import astar_h1
 import mcts
 import astar_h2
+
+def algorithms_vs_algorithms_move(game_board,algorithm):
+    if algorithm=="astar_h1":
+        bot = astar_h1.AStarBot(game_board, 1)
+        bot.play()
+    elif algorithm=="astar_h2":
+        bot = astar_h2.AStarBot(game_board, 1)
+        bot.play()
+    elif algorithm=="montecarlo":
+        bot = mcts.MonteCarlo(game_board, 1)
+        bot.play()
+    elif algorithm=="minimax":
+        pass
+    
 
 
 def algorithms_move(game_board,algorithm):
@@ -201,7 +219,7 @@ def algorithms_move(game_board,algorithm):
         bot = astar_h2.AStarBot(game_board, 2)
         bot.play()
     elif algorithm=="montecarlo":
-        bot = mcts.MonteCarlo2(game_board, 2)
+        bot = mcts.MonteCarlo(game_board, 2)
         bot.play()
     elif algorithm=="minimax":
         pass

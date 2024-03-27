@@ -13,24 +13,26 @@ class AStarBot:
 
     def play(self):
         movesTree = tree.AStarTree(self.board, self.player)
-        forbiddenMove = []
-        while True:
-            bestMove = self.bestMove(movesTree, [])
-            if not self.board.move(bestMove[0], self.player):
-                forbiddenMove.append(bestMove[0])
-            else:
-                return True
+        bestMove = self.bestMove(movesTree)
+        self.board.move(bestMove, self.player)
 
-    def bestMove(self, movesTree, forbidenMoves):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
-        bestMove = (1, self.f(movesTree.root.children[0]))
-        for i in movesTree.root.children:
-            if not forbidenMoves.__contains__(i+1):
-                print(f'children {i}:\n {movesTree.root.children[i].value}')
-                f = self.f(movesTree.root.children[i])
-                print(f'pontuacao:{f}')
-                if f < bestMove[1]:
-                    bestMove = (i+1, f)
-        return bestMove
+    def bestMove(self, movesTree):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
+        bestMove = None
+        for move in movesTree.root.children:
+            f = self.f(movesTree.root.getChild(move))
+            g = self.g()
+            h = self.h(movesTree.root.getChild(move))
+            # print(move, ":", f, "=", h, "+", g)
+            if bestMove == None:
+                if movesTree.root.children.__contains__(4):
+                    bestMove = (4, self.f(movesTree.root.getChild(4)))
+                else:
+                    bestMove = (move, f)
+            if f < bestMove[1]:
+                # print("esse")
+                bestMove = (move, f)
+        return bestMove[0]
+
  
     def f(self, node):
         return self.h(node) + self.g()
@@ -67,23 +69,29 @@ class AStarBot:
             for j in range(self.board.cols):        
                 # Horizontal segments
                 if j <= self.board.cols - 4:
-                    segment = [node.value[i][j+k] for k in range(4)]
+                    segment = [node.value.board[i][j+k] for k in range(4)]
                     score += self.evaluate_segment(segment)
                     
                 # Vertical segments
                 if i <= self.board.rows - 4:
-                    segment = [node.value[i+k][j] for k in range(4)]
+                    segment = [node.value.board[i+k][j] for k in range(4)]
                     score += self.evaluate_segment(segment)
 
                 # Diagonal segments (top-left to bottom-right)
                 if i <= self.board.rows - 4 and j <= self.board.cols - 4:
-                    segment = [node.value[i+k][j+k] for k in range(4)]
+                    segment = [node.value.board[i+k][j+k] for k in range(4)]
                     score += self.evaluate_segment(segment)
 
                 # Diagonal segments (bottom-left to top-right)
                 if i >= 3 and j <= self.board.cols - 4:
-                    segment = [node.value[i-k][j+k] for k in range(4)]
+                    segment = [node.value.board[i-k][j+k] for k in range(4)]
                     score += self.evaluate_segment(segment)
+                    
+        #Add move bonus
+        if self.player == 'X':
+            score += 16
+        else:
+              score -= 16
         return score
 
         

@@ -6,8 +6,6 @@ class Node:
         self.value = value      # is a matrix of the board in AStarTree and is a Board object in MCTree
         self.children = children    # is a dictionary {0: node, 1: node, ...}
         self.parent = parent    # is another node
-        
-        #Monte Carlo
         self.wins = 0
         self.visits = 0
         
@@ -75,7 +73,7 @@ class AStarTree:
     def __init__(self, board, player):              # player is 1 or 2, board is a board object
         self.player = player                        # 1 or 2
         self.root = Node(board, {}, None)           # root node with the matrix of the board as its value
-        self.root.genChildren(player)                     # generates new children for the root
+        self.root.genChildren(player)               # generates new children for the root
         
     
 class MCTree():
