@@ -1,7 +1,7 @@
 import board
 import pygame
-import nosso_astar
-import professor_astar
+import astar_h1
+import astar_h2
 import tree
 import mcts
 
