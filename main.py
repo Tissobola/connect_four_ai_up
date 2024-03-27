@@ -3,12 +3,14 @@ import interface
 import pygame
 import astar
 import tree
+import mcts
 
 
 
 #-------------------------------- GAME --------------------------------
 game_board = board.Board()
-bot = astar.AStarBot(game_board, 2)
+# bot = astar.AStarBot(game_board, 2)
+bot = mcts.MonteCarlo(game_board, 2)
 
 turn = 0
 collumn = 0
@@ -20,6 +22,7 @@ collumn = 0
 print(game_board)
 while (not game_board.end):
   if (turn % 2) + 1 == 1:
+    print("Sua vez:")
     game_board.move(int(input()), 1)
   else:
     bot.play()

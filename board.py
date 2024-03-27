@@ -1,3 +1,5 @@
+import numpy as np
+
 class Board:
     def __init__(self):
         self.cols = 7
@@ -8,11 +10,12 @@ class Board:
         self.p2Symbol = 'O'
         self.populateBoard()
         self.end = False
+        self.winner = None
 
     def __str__(self):
         line = ""
         result = ""
-        for i in range(5, -1, -1):
+        for i in range(self.rows-1, -1, -1):
             for ii in range(self.cols):
                 line += self.board[i][ii]
             result += line + "\n"
@@ -27,23 +30,24 @@ class Board:
             self.board.append(aux.copy())
 
     def move(self, collumn, player):
-        return self.addToCollumn(collumn, self.player(player))
+        return self.addToCollumn(collumn, player)
             
-    def addToCollumn(self, collumn, symbol):
+    def addToCollumn(self, collumn, player):
         #self.board[self.rowTops[collumn]][collumn] = symbol
         # if self.checkWinner(symbol, (self.rowTops[collumn],collumn)):
         #    self.showWinner(symbol)
         #self.rowTops[collumn] -= 1 #Vai decrementando os valores da lista rowTops
         for i in range(len(self.board)):
-            if self.board[i][collumn-1] == self.nullSymbol or i == self.rows - 1:
-                self.board[i][collumn-1] = symbol
-                if self.checkWinner(symbol, (i,collumn-1)):
-                    self.showWinner(symbol)
+            if self.board[i][collumn-1] == self.nullSymbol and self.possibleMoves().__contains__(collumn):
+                self.board[i][collumn-1] = self.player(player)
+                if self.checkWinner(self.player(player), (i,collumn-1)):
+                    self.showWinner(player)
                 return True
-            
         return False
         
     def checkWinner(self, player, last_move):
+        if len(self.possibleMoves()) == 0:
+            self.end = True
         row, col = last_move
         token = player  # assuming player's token is represented by 'X' or 'O'
 
@@ -93,10 +97,15 @@ class Board:
                     
     def showWinner(self, player):
         self.end = True
-        # print("\n\nPLAYER "+str(player)+" WINS!\n"+str(self))
+        if self.winner == None:
+            self.winner = player
+        # print("\n\nPLAYER "+str(self.player(player))+" WINS!\n"+str(self))
 
     def player(self, player):
         if player == 1:
             return self.p1Symbol
         elif player == 2:
             return self.p2Symbol
+        
+    def possibleMoves(self):
+        return [col+1 for col in range(self.cols) if self.board[self.rows-1][col] == self.nullSymbol]
