@@ -16,6 +16,7 @@ class Board:
         self.algorithm2 = None 
         
         
+        
     def __str__(self):
         line = ""
         result = ""

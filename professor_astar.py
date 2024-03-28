@@ -22,6 +22,8 @@ class AStarBot:
                 return True
 
     def bestMove(self, movesTree, forbidenMoves):   # movesTree is the tree of different moves, forbidenMoves is a list of positions to which it shouldn't make a move
+        print("entrou")
+        print("key = ", movesTree.root.children[0])
         bestMove = (1, self.f(movesTree.root.children[0]))
         for i in movesTree.root.children:
             if not forbidenMoves.__contains__(i+1):
@@ -67,24 +69,28 @@ class AStarBot:
             for j in range(self.board.cols):        
                 # Horizontal segments
                 if j <= self.board.cols - 4:
-                    segment = [node.value[i][j+k] for k in range(4)]
+                    segment = [node.value.board[i][j+k] for k in range(4)]
                     score += self.evaluate_segment(segment)
                     
                 # Vertical segments
                 if i <= self.board.rows - 4:
-                    segment = [node.value[i+k][j] for k in range(4)]
+                    segment = [node.value.board[i+k][j] for k in range(4)]
                     score += self.evaluate_segment(segment)
 
                 # Diagonal segments (top-left to bottom-right)
                 if i <= self.board.rows - 4 and j <= self.board.cols - 4:
-                    segment = [node.value[i+k][j+k] for k in range(4)]
+                    segment = [node.value.board[i+k][j+k] for k in range(4)]
                     score += self.evaluate_segment(segment)
 
                 # Diagonal segments (bottom-left to top-right)
                 if i >= 3 and j <= self.board.cols - 4:
-                    segment = [node.value[i-k][j+k] for k in range(4)]
+                    segment = [node.value.board[i-k][j+k] for k in range(4)]
                     score += self.evaluate_segment(segment)
-        return score
 
-        
-            # Add move bonus
+                # Move bonus for player
+                if self.board.turn == 1:
+                    score += 16
+                elif self.board.turn == 2:
+                    score -= 16
+                    
+        return score

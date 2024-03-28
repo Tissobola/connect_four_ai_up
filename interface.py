@@ -192,6 +192,7 @@ def algorithm_vs_algorithm(game):
 import nosso_astar
 import mcts
 import professor_astar
+import minimax
 
 
 def algorithms_move(game_board,algorithm):
@@ -205,8 +206,9 @@ def algorithms_move(game_board,algorithm):
         bot = mcts.MonteCarlo2(game_board, 2)
         bot.play()
     elif algorithm=="minimax":
-        pass
-  
+        bot = minimax.MinimaxBot(game_board, 2)
+        bot.play()
+    
 
 def main(game, algorithm1, algorithm2, GUI):
     game.algorithm1 = algorithm1
