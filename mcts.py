@@ -9,7 +9,7 @@ class MonteCarlo:
         self.tree = tree.MCTree(state, player)      # tree based on the board object
         self.player = player    # 1 or 2
         self.state = state  # Board object
-        self.simulations = 10000
+        self.simulations = 1000
         self.c = np.sqrt(2)
     
     def selection(self):
