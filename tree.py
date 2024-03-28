@@ -175,9 +175,21 @@ class Node:
 class AStarTree:
     def __init__(self, board, player):              # player is 1 or 2, board is a board object
         self.player = player                        # 1 or 2
-        self.root = Node(board, {}, None)           # root node with the matrix of the board as its value
-        self.root.genChildren(player)               # generates new children for the root
+        self.root = Node(board.board, {})           # root node with the matrix of the board as its value
+        children = self.genChildren(self.root)      # new board matrixes made with different possible moves for the player
+        self.root.setChildren(children)             # set the new board matrixes as children of the root
         
+    def genChildren(self, node):
+        temp = board.Board()
+        cols = temp.cols
+        temp = 0
+        children = {}
+        for i in range(cols):
+            temporaryBoard = board.Board()
+            temporaryBoard.board = np.copy(node.value)
+            temporaryBoard.move(i+1, self.player)
+            children[i] = Node(np.copy(temporaryBoard.board), {})
+        return children
     
 class MCTree():
     def __init__(self, board, player):

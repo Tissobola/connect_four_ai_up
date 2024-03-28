@@ -189,7 +189,7 @@ def algorithm_vs_algorithm(game):
         pygame.display.update()
 
 
-import nosso_astar
+import astar_h1
 import mcts
 import professor_astar
 import minimax
@@ -197,10 +197,10 @@ import minimax
 
 def algorithms_move(game_board,algorithm):
     if algorithm=="astar_h1":
-        bot = nosso_astar.AStarBot(game_board, 2)
+        bot = astar_h1.AStarBot(game_board, 2)
         bot.play()
     elif algorithm=="astar_h2":
-        bot = professor_astar.AStarBot(game_board, 2)
+        bot = astar_h2.AStarBot(game_board, 2)
         bot.play()
     elif algorithm=="montecarlo":
         bot = mcts.MonteCarlo2(game_board, 2)
