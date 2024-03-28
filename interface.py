@@ -191,7 +191,7 @@ def algorithm_vs_algorithm(game):
 
 import astar_h1
 import mcts
-import professor_astar
+import astar_h2
 import minimax
 
 

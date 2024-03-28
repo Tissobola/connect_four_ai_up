@@ -106,7 +106,11 @@ class MinimaxBot:
         else: # minimizingPlayer
             minEval = float('inf')
             bestColumn = None
-            children = node.genChildren(self.player)
+            # children = node.genChildren(self.player)
+            opponent_player = 1 if self.player == 2 else 2  # Determine the opponent's player number
+            children = node.genChildren(opponent_player)  # Use the opponent's player number
+            if len(children) == 0: 
+                node.end = True
             for key, value in children.items():
                 print(f"{key} : {value.value}")
             if len(children) == 0: node.end = True
