@@ -46,7 +46,7 @@ class MinimaxBot:
         for i in range(self.board.rows):
             for j in range(self.board.cols):  
 
-                print("horizontal")      
+                     
                 # Horizontal segments
                 if j <= self.board.cols - 4:
                     segment = [node.value.board[i][j+k] for k in range(4)]
