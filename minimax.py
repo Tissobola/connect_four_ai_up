@@ -7,10 +7,11 @@ class MinimaxBot:
         self.player = player
     
     def play(self):
+        current_node = Node(self.board, {}, None)
         if self.player == 2:
-            column, play_value = self.minimax(self.board, 5, True) # depth = 
-        else:
-            column, play_value = self.minimax(self.board, 5, False) # depth = 
+            maximizingPlayer = False
+        else: maximizingPlayer = True
+        column, play_value = self.minimax(current_node, 5, maximizingPlayer)
         # print("coluna = ", column)
         # print("play_value = ", play_value)
         self.board.move(column, self.player)
@@ -18,9 +19,7 @@ class MinimaxBot:
     
     def evaluate_segment(self, segment):
         count_x = segment.count('X')
-        print("count x = ", count_x)
         count_o = segment.count('O')
-        print("count o = ", count_o)
         if count_o == 3 and count_x == 0:
             return -50
         elif count_o == 2 and count_x == 0:
@@ -53,19 +52,19 @@ class MinimaxBot:
                     score += self.evaluate_segment(segment)
                     
                    
-                print("vertical")
+    
                 # Vertical segments
                 if i <= self.board.rows - 4:
                     segment = [node.value.board[i+k][j] for k in range(4)]
                     score += self.evaluate_segment(segment)
                     
-                print("diagonal principal")
+            
                 # Diagonal segments (top-left to bottom-right)
                 if i <= self.board.rows - 4 and j <= self.board.cols - 4:
                     segment = [node.value.board[i+k][j+k] for k in range(4)]
                     score += self.evaluate_segment(segment)
                     
-                print("diagonal /")
+       
                 # Diagonal segments (bottom-left to top-right)
                 if i >= 3 and j <= self.board.cols - 4:
                     segment = [node.value.board[i-k][j+k] for k in range(4)]
@@ -82,21 +81,16 @@ class MinimaxBot:
 
 
     def minimax(self, node, depth, maximizingPlayer): # recursive function
-        tree = Node(self.board, {}, None)
-        # children = tree.genChildren(self.player)
-        # for i, child in children.items():
-        #     print(f"Successor {i}\n : {child.value}")
-
+        # print("node type = ", type(node))
+        # tree = Node(self.board, {}, None)
         if depth == 0 or node.end :
             
             return None, self.h(node) 
 
-    
-
         if maximizingPlayer:
             maxEval = float('-inf')
             bestColumn = None
-            children = tree.genChildren(self.player)
+            children = node.genChildren(self.player)
             if len(children) == 0: node.end = True
             for column, child in children.items():
                 _, value_current_board = self.minimax(child, depth - 1, False)
@@ -104,7 +98,7 @@ class MinimaxBot:
                 if value_current_board > maxEval:
                     maxEval = value_current_board
                     bestColumn = column
-            print("max = ", maxEval)
+
             return bestColumn, maxEval
         
         
@@ -112,18 +106,18 @@ class MinimaxBot:
         else: # minimizingPlayer
             minEval = float('inf')
             bestColumn = None
-            children = tree.genChildren(self.player)
+            children = node.genChildren(self.player)
+            for key, value in children.items():
+                print(f"{key} : {value.value}")
             if len(children) == 0: node.end = True
             for column, child in children.items():
-                _, value_current_board = self.minimax(child, depth - 1, False)
+                _, value_current_board = self.minimax(child, depth - 1, True)
     
                 if value_current_board < minEval:
                     minEval = value_current_board
                     bestColumn = column
-            print("min = ", minEval)
             return bestColumn, minEval
         
         
 
 
-# CORRIGIR HEURÍSTICA 
