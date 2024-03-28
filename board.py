@@ -48,7 +48,8 @@ class Board:
                 if len(self.possibleMoves()) == 0:
                     self.end = True
                 if self.checkWinner(self.player(player), (i,collumn-1)):
-                    self.showWinner(self.player(player))      
+                    self.showWinner(self.player(player))   
+                self.change_player()   
                 return True
         return False
         

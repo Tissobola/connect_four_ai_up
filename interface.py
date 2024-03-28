@@ -187,7 +187,6 @@ def algorithm_vs_algorithm(game):
             
         elif game.turn == 2:
             algorithms_vs_algorithms_move(game, game.algorithm2)
-        game.change_player()
         pygame.time.delay(100)
         pygame.display.update()
 

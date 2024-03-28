@@ -49,3 +49,4 @@ import interface
 
 #astar_h1 vs astar_h2
 #interface.main(game_board, algorithm1='astar_h1', algorithm2='astar_h2', GUI= True)
+
