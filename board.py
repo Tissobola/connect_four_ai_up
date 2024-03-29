@@ -13,7 +13,8 @@ class Board:
         self.winner = None
         self.turn = 1
         self.algorithm1 = None 
-        self.algorithm2 = None 
+        self.algorithm2 = None
+        self.is_terminal = False
         
         
     def __str__(self):
@@ -25,6 +26,62 @@ class Board:
             result += line + "\n"
             line = ""
         return result
+    
+    def copy(self):
+        new_board = Board()
+        new_board.board = [row[:] for row in self.board]  # Deep copy the state
+        return new_board
+    
+    def evaluate_segment(self, segment):
+        count_x = segment.count('X')
+        count_o = segment.count('O')
+        if count_o == 3 and count_x == 0:
+            return -50
+        elif count_o == 2 and count_x == 0:
+            return -10
+        elif count_o == 1 and count_x == 0:
+            return -1
+        elif count_x == 1 and count_o == 0:
+            return 1
+        elif count_x == 2 and count_o == 0:
+            return 10
+        elif count_x == 3 and count_o == 0:
+            return 50
+        elif count_x == 4:
+            return 512
+        elif count_o == 4:
+            return -512
+        else:
+            return 0
+        
+
+    def heuristic(self, node):
+        score = 0
+        # Count occurrences of 'X' and 'O' in the node
+        for i in range(self.rows):
+            for j in range(self.cols):
+                # Horizontal segments
+                if j <= self.cols - 4:
+                    segment = [node.board[i][j+k] for k in range(4)]
+                    score += self.evaluate_segment(segment)
+                # Vertical segments
+                if i <= self.rows - 4:
+                    segment = [node.board[i+k][j] for k in range(4)]
+                    score += self.evaluate_segment(segment)
+                # Diagonal segments (top-left to bottom-right)
+                if i <= self.rows - 4 and j <= self.cols - 4:
+                    segment = [node.board[i+k][j+k] for k in range(4)]
+                    score += self.evaluate_segment(segment)
+                # Diagonal segments (bottom-left to top-right)
+                if i >= 3 and j <= self.cols - 4:
+                    segment = [node.board[i-k][j+k] for k in range(4)]
+                    score += self.evaluate_segment(segment)
+        # Move bonus for player
+        if self.turn == 1:
+            score += 16
+        elif self.turn == 2:
+            score -= 16
+        return score
 
     def populateBoard(self):
         aux = []

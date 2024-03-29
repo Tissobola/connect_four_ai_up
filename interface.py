@@ -194,6 +194,8 @@ def algorithm_vs_algorithm(game):
 import astar_h1
 import mcts
 import astar_h2
+import minimax
+import alphabeta
 
 def algorithms_vs_algorithms_move(game_board,algorithm):
     if algorithm=="astar_h1":
@@ -205,8 +207,7 @@ def algorithms_vs_algorithms_move(game_board,algorithm):
     elif algorithm=="montecarlo":
         bot = mcts.MonteCarlo(game_board, 1)
         bot.play()
-    elif algorithm=="minimax":
-        pass
+    
     
 
 
@@ -221,7 +222,11 @@ def algorithms_move(game_board,algorithm):
         bot = mcts.MonteCarlo(game_board, 2)
         bot.play()
     elif algorithm=="minimax":
-        pass
+        bot = minimax.MinimaxBot(game_board)
+        bot.play()
+    elif algorithm=="alphabeta":
+        bot = alphabeta.AlphaBeta(game_board)
+        bot.play()
     elif algorithm == None:
         game_board.move(int(input()), game_board.turn)
   
