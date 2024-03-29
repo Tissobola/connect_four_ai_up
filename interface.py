@@ -194,19 +194,39 @@ def algorithm_vs_algorithm(game):
 import astar_h1
 import mcts
 import astar_h2
+import time
 
 def algorithms_vs_algorithms_move(game_board,algorithm):
     if algorithm=="astar_h1":
+        h1_times=[]
+        start_time = time.time()
         bot = astar_h1.AStarBot(game_board, 1)
         bot.play()
+        end_time = time.time()
+        execution_time = end_time - start_time  # Calcula o tempo de execução
+        h1_times.append(execution_time)
+        
     elif algorithm=="astar_h2":
+        h2_times=[]
+        start_time = time.time()
         bot = astar_h2.AStarBot(game_board, 1)
         bot.play()
+        end_time = time.time()
+        execution_time = end_time - start_time  # Calcula o tempo de execução
+        h2_times.append(execution_time)
+        
     elif algorithm=="montecarlo":
+        mc_times=[]
+        start_time = time.time()
         bot = mcts.MonteCarlo(game_board, 1)
         bot.play()
+        end_time = time.time()
+        execution_time = end_time - start_time  # Calcula o tempo de execução
+        mc_times.append(execution_time)
+    
     elif algorithm=="minimax":
         pass
+        
     
 
 

@@ -4,6 +4,7 @@ import astar_h1
 import astar_h2
 import tree
 import mcts
+import time
 
 
 
@@ -36,7 +37,7 @@ while (not game_board.end):
 import interface 
 #for menu
 #player vs player
-interface.main(game_board, algorithm1=None, algorithm2=None, GUI= False)
+#interface.main(game_board, algorithm1=None, algorithm2=None, GUI= False)
 
 #player vs astar-nossa
 #interface.main(game_board, algorithm1='astar_h1', algorithm2=None, GUI= True)
@@ -48,5 +49,5 @@ interface.main(game_board, algorithm1=None, algorithm2=None, GUI= False)
 #interface.main(game_board, algorithm1='astar_h2', algorithm2=None, GUI= True)
 
 #astar_h1 vs astar_h2
-#interface.main(game_board, algorithm1='astar_h1', algorithm2='astar_h2', GUI= True)
+interface.main(game_board, algorithm1='astar_h1', algorithm2='astar_h2', GUI= True)
 
