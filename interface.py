@@ -94,28 +94,28 @@ def input_column():
         if column.isdigit():
             column = int(column)
             if 1 <= column <= collumn_count:
-                return column - 1
+                return column
 
 def play_on_terminal(game, verbose=True):
     while True:
         if verbose:
             print(game)
             if game.end:
-                if game.winner == 1:
+                if game.winner == 'X':
                     print("Red wins!")
-                elif game.winner == 2:
+                elif game.winner == 'O':
                     print("Blue wins!")
                 else:
                     print("It's a tie!")
                 break
             elif game.turn == 1:
-                print("Yellow's turn")
+                print("Blue's turn")
                 if game.algorithm2 is None:
                     column = input_column()
                 else:
                     column = algorithms_move(game, game.algorithm1)
                     sleep(0.5)
-                if not game.move(column):
+                if not game.move(column, game.turn):
                     print("Invalid move")
             else:
                 print("Red's turn")
@@ -128,7 +128,7 @@ def play_on_terminal(game, verbose=True):
                 else:
                     column = algorithms_move(game, game.algorithm2)
                     sleep(0.5)
-                if not game.move(column):
+                if not game.move(column, game.turn):
                     print("Invalid move")
                 print()
         else:
@@ -222,6 +222,8 @@ def algorithms_move(game_board,algorithm):
         bot.play()
     elif algorithm=="minimax":
         pass
+    elif algorithm == None:
+        game_board.move(int(input()), game_board.turn)
   
 
 def main(game, algorithm1, algorithm2, GUI):
