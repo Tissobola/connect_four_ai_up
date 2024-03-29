@@ -1,123 +1,80 @@
 import board
 from tree import Node
+import copy
 
 class MinimaxBot:
-    def __init__(self, board, player):
+    def __init__(self, board):
         self.board = board
-        self.player = player
+        # self.player = player
+    
+
+    
+    def get_possible_moves(self, node, player):
+        possible_moves = {}
+        for col in range(node.cols):
+            new_board = copy.deepcopy(node)
+            if new_board.move(col + 1, player):
+                possible_moves[col] = new_board
+        #self.board.change_player()
+        return possible_moves
+    
+
     
     def play(self):
-        current_node = Node(self.board, {}, None)
-        if self.player == 2:
-            maximizingPlayer = False
-        else: maximizingPlayer = True
-        column, play_value = self.minimax(current_node, 5, maximizingPlayer)
-        # print("coluna = ", column)
-        # print("play_value = ", play_value)
-        self.board.move(column, self.player)
-        return True
-    
-    def evaluate_segment(self, segment):
-        count_x = segment.count('X')
-        count_o = segment.count('O')
-        if count_o == 3 and count_x == 0:
-            return -50
-        elif count_o == 2 and count_x == 0:
-            return -10
-        elif count_o == 1 and count_x == 0:
-            return -1
-        elif count_x == 1 and count_o == 0:
-            return 1
-        elif count_x == 2 and count_o == 0:
-            return 10
-        elif count_x == 3 and count_o == 0:
-            return 50
-        elif count_x == 4:
-            return 512
-        elif count_o == 4:
-            return -512
-        else:
-            return 0
-
-    def h(self, node):
-        score = 0
-        # Count occurrences of 'X' and 'O' in the node
-        for i in range(self.board.rows):
-            for j in range(self.board.cols):  
-
-                     
-                # Horizontal segments
-                if j <= self.board.cols - 4:
-                    segment = [node.value.board[i][j+k] for k in range(4)]
-                    score += self.evaluate_segment(segment)
-                    
-                   
-    
-                # Vertical segments
-                if i <= self.board.rows - 4:
-                    segment = [node.value.board[i+k][j] for k in range(4)]
-                    score += self.evaluate_segment(segment)
-                    
-            
-                # Diagonal segments (top-left to bottom-right)
-                if i <= self.board.rows - 4 and j <= self.board.cols - 4:
-                    segment = [node.value.board[i+k][j+k] for k in range(4)]
-                    score += self.evaluate_segment(segment)
-                    
+        
+        column, score = self.minimax(self.board, 5, True)
        
-                # Diagonal segments (bottom-left to top-right)
-                if i >= 3 and j <= self.board.cols - 4:
-                    segment = [node.value.board[i-k][j+k] for k in range(4)]
-                    score += self.evaluate_segment(segment)
-                    
+            # column, score = self.minimax(self.board, 5, False)
+        # print("player = ", self.board.turn)
+        print("JOGADA : ", column + 1)
+        print("SCORE : ", score)
+        # print("player ANTES do move = ", self.board.turn)
+        self.board.move(column + 1, self.board.turn)  # Adjust for 1-based indexing
+        # print("player DEPOIS do move = ", self.board.turn)
 
-        # Move bonus for player
-        if self.board.turn == 1:
-            score += 16
-        elif self.board.turn == 2:
-            score -= 16
-            
-        return score
+        return True
 
+    def minimax(self, node, depth, maximizingPlayer):
 
-    def minimax(self, node, depth, maximizingPlayer): # recursive function
-        # print("node type = ", type(node))
-        # tree = Node(self.board, {}, None)
-        if depth == 0 or node.end :
-            
-            return None, self.h(node) 
+        if depth == 0 or self.board.is_terminal:
+            return None, self.board.heuristic(node)
 
         if maximizingPlayer:
+            # print("player maximinzingPlayer = ", self.board.turn)
             maxEval = float('-inf')
             bestColumn = None
-            children = node.genChildren(self.player)
-            if len(children) == 0: node.end = True
-            for column, child in children.items():
+            oponent = 3 - self.board.turn
+            possible_moves = self.get_possible_moves(node, oponent)
+            
+            if len(possible_moves) == 0: 
+                self.board.is_terminal = True
+            for i, child in possible_moves.items():
+                print(f"sucessor {i}\n: {child}")
                 _, value_current_board = self.minimax(child, depth - 1, False)
-                
+                print("value_current_board : ", value_current_board)
                 if value_current_board > maxEval:
                     maxEval = value_current_board
-                    bestColumn = column
-
+                    # print("max Eval = ", maxEval)
+                    bestColumn = i
+                    # print("MAX bestColumn = ", bestColumn + 1)
             return bestColumn, maxEval
         
-        
-        
-        else: # minimizingPlayer
+        else:  # Minimizing player
+            # print("player minimizingPlayer= ", self.board.turn)
             minEval = float('inf')
             bestColumn = None
-            children = node.genChildren(self.player)
-            for key, value in children.items():
-                print(f"{key} : {value.value}")
-            if len(children) == 0: node.end = True
-            for column, child in children.items():
+            oponent = 3 - self.board.turn
+            possible_moves = self.get_possible_moves(node, self.board.turn)
+            if len(possible_moves) == 0: 
+                self.board.is_terminal = True
+            for i, child in possible_moves.items():
+                print(f"sucessor {i}\n: {child}")
                 _, value_current_board = self.minimax(child, depth - 1, True)
-    
+                print("value_current_board : ", value_current_board)
                 if value_current_board < minEval:
                     minEval = value_current_board
-                    bestColumn = column
+                    print("min Eval = ", minEval)
+                    bestColumn = i
+                    # print("MIN bestColumn = ", bestColumn + 1 )
             return bestColumn, minEval
-        
-        
-
-
+    

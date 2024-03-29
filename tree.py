@@ -109,7 +109,6 @@ class Node:
         self.parent = parent    # is another node
         self.wins = 0
         self.visits = 0
-        self.end = False
         
     def setValue(self, value):
         self.value = value
@@ -144,6 +143,7 @@ class Node:
             temporaryBoard.move(i, player)
             
             children[i] = Node(temporaryBoard, {}, self)
+            print(f"Sucessor {i} : {children[i].value}")
         self.setChildren(children)
         return children
     

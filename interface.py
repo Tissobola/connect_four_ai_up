@@ -70,7 +70,7 @@ def draw_board(game, screen):
     if game.end:
        
         font = pygame.font.Font(None, 64)
-        if game.winner == 'X':
+        if  'X':
             winner_text = font.render("Red wins!", True, colors["RED"])
         elif game.winner == 'O':
             winner_text = font.render("Blue wins!", True, colors["BLUE"])
@@ -191,7 +191,7 @@ def algorithm_vs_algorithm(game):
 
 import astar_h1
 import mcts
-import professor_astar
+import astar_h2
 import minimax
 
 
@@ -206,7 +206,7 @@ def algorithms_move(game_board,algorithm):
         bot = mcts.MonteCarlo2(game_board, 2)
         bot.play()
     elif algorithm=="minimax":
-        bot = minimax.MinimaxBot(game_board, 2)
+        bot = minimax.MinimaxBot(game_board)
         bot.play()
     
 
