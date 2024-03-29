@@ -70,7 +70,7 @@ def draw_board(game, screen):
     if game.end:
        
         font = pygame.font.Font(None, 64)
-        if  'X':
+        if  game.winner == 'X':
             winner_text = font.render("Red wins!", True, colors["RED"])
         elif game.winner == 'O':
             winner_text = font.render("Blue wins!", True, colors["BLUE"])
