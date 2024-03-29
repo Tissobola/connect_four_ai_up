@@ -116,7 +116,6 @@ class Menu:
         main(self.game_board, algorithm1='montecarlo', algorithm2=None, GUI= True)
     
     def start_game_minimax(self):
-        print("entrou")
         main(self.game_board, algorithm1='minimax', algorithm2=None, GUI= True)
         
     def start_game_alphabeta(self):
@@ -154,7 +153,6 @@ class Menu:
                     elif self.monte_carlo_button.collide_point(pygame.mouse.get_pos()):
                         self.start_game_monte_carlo()
                     elif self.minimax_button.collide_point(pygame.mouse.get_pos()):
-                        print("entrou")
                         self.start_game_minimax()
                     elif self.alphabeta_button.collide_point(pygame.mouse.get_pos()):
                         self.start_game_alphabeta()
