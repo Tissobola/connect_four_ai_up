@@ -2,7 +2,7 @@ import board
 from tree import Node
 import copy
 
-class MinimaxBot:
+class AlphaBeta:
     def __init__(self, board):
         self.board = board
         # self.player = player
@@ -22,9 +22,9 @@ class MinimaxBot:
     
     def play(self):
         
-        column, score = self.minimax(self.board, 5, True)
+        column, score = self.minimax(self.board, 7, float('-inf'), float('inf'), True)
        
-            # column, score = self.minimax(self.board, 5, False)
+        # column, score = self.minimax(self.board, 5, False)
         # print("player = ", self.board.turn)
         print("JOGADA : ", column + 1)
         print("SCORE : ", score)
@@ -34,7 +34,7 @@ class MinimaxBot:
 
         return True
 
-    def minimax(self, node, depth, maximizingPlayer):
+    def minimax(self, node, depth, alpha, beta, maximizingPlayer):
 
         if depth == 0 or self.board.is_terminal:
             return None, self.board.heuristic(node)
@@ -50,13 +50,16 @@ class MinimaxBot:
                 self.board.is_terminal = True
             for i, child in possible_moves.items():
                 print(f"sucessor {i}\n: {child}")
-                _, value_current_board = self.minimax(child, depth - 1, False)
+                _, value_current_board = self.minimax(child, depth - 1, alpha, beta, False)
                 print("value_current_board : ", value_current_board)
                 if value_current_board > maxEval:
                     maxEval = value_current_board
                     # print("max Eval = ", maxEval)
                     bestColumn = i
                     # print("MAX bestColumn = ", bestColumn + 1)
+                    alpha = max(alpha, maxEval)
+                    if alpha >= beta:
+                        break
             return bestColumn, maxEval
         
         else:  # Minimizing player
@@ -69,13 +72,16 @@ class MinimaxBot:
                 self.board.is_terminal = True
             for i, child in possible_moves.items():
                 print(f"sucessor {i}\n: {child}")
-                _, value_current_board = self.minimax(child, depth - 1, True)
+                _, value_current_board = self.minimax(child, depth - 1, alpha, beta, True)
                 print("value_current_board : ", value_current_board)
                 if value_current_board < minEval:
                     minEval = value_current_board
                     print("min Eval = ", minEval)
                     bestColumn = i
                     # print("MIN bestColumn = ", bestColumn + 1 )
+                    beta = min(beta, minEval)
+                    if alpha >= beta:
+                        break
             return bestColumn, minEval
     
 

@@ -193,6 +193,7 @@ import astar_h1
 import mcts
 import astar_h2
 import minimax
+import alphabeta
 
 
 def algorithms_move(game_board,algorithm):
@@ -208,7 +209,9 @@ def algorithms_move(game_board,algorithm):
     elif algorithm=="minimax":
         bot = minimax.MinimaxBot(game_board)
         bot.play()
-    
+    elif algorithm=="alphabeta":
+        bot = alphabeta.AlphaBeta(game_board)
+        bot.play()
 
 def main(game, algorithm1, algorithm2, GUI):
     game.algorithm1 = algorithm1
