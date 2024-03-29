@@ -93,6 +93,3 @@ class AStarBot:
         else:
               score -= 16
         return score
-
-        
-            # Add move bonus
