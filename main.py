@@ -43,11 +43,11 @@ import interface
 #interface.main(game_board, algorithm1='astar_h1', algorithm2=None, GUI= True)
 
 #player vs montecarlo
-#interface.main(game_board, algorithm1='montecarlo', algorithm2=None, GUI= True)
+interface.main(game_board, algorithm1='montecarlo', algorithm2=None, GUI= True)
 
 #player vs astar-professor 
 #interface.main(game_board, algorithm1='astar_h2', algorithm2=None, GUI= True)
 
 #astar_h1 vs astar_h2
-interface.main(game_board, algorithm1='astar_h1', algorithm2='astar_h2', GUI= True)
+#interface.main(game_board, algorithm1='astar_h1', algorithm2='astar_h2', GUI= True)
 

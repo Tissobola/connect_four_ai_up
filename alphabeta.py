@@ -22,7 +22,7 @@ class AlphaBeta:
     
     def play(self):
         
-        column, score = self.minimax(self.board, 7, float('-inf'), float('inf'), True)
+        column, score = self.minimax(self.board, 5, float('-inf'), float('inf'), True)
        
         # column, score = self.minimax(self.board, 5, False)
         # print("player = ", self.board.turn)
