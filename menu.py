@@ -60,10 +60,6 @@ class Menu:
         self.minimax_button = Button("Minimax", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 90, self.height // 2 + 100)
         self.alphabeta_button = Button("ALphaBeta", 175, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 90, self.height // 2 + 200)
         
-        self.mc_vs_h1 = Button("Monte Carlo vs A* (Heuristic 1)", 250, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 - 50)
-        self.mc_vs_h2 = Button("Monte Carlo vs A* (Heuristic 2)", 250, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 + 50)
-        self.h1_vs_h2 = Button("A* (Heuristic 1) vs A* (Heuristic 2)", 250, 50, self.button_font, self.colors['black'], self.colors['brown'], self.width // 2 - 100, self.height // 2 + 150)
-        
         self.game_board = Board()
         
     def setup(self):
@@ -136,7 +132,7 @@ class Menu:
         self.text("Player vs Algorithm", self.colors['brown'], self.width // 2, self.height // 2 - 300)
         self.astar_heuristic1_button.draw(self.screen)
         self.astar_heuristic2_button.draw(self.screen)
-        self.monte_carlo_button.draw(self.screen) 
+        self.monte_carlo_button.draw(self.screen)
         self.minimax_button.draw(self.screen)
         self.alphabeta_button.draw(self.screen)
         pygame.display.flip()
