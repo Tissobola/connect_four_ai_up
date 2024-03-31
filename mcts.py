@@ -24,8 +24,6 @@ class MonteCarlo:
         return self.selecting(self.tree.root)
     
     def selecting(self, node):
-        print('selecting')
-
         if len(node.children) == 0:
             return node
         return self.selecting(node.getChild(self.bestMove(node)))
@@ -47,20 +45,16 @@ class MonteCarlo:
         if not node.getChild(move).visits == 0 :
             exploitation = node.getChild(move).wins / node.getChild(move).visits
             exploration = np.sqrt(np.log(node.visits) / node.getChild(move).visits)
-            print(f'{exploitation} + {self.c * exploration}')
-            
             ucb1 = exploitation + self.c * exploration
         return ucb1
 
     def expansion(self, node):
-        print('expansion')
         if node.nodeHeight() % 2 == 0:
             node.genChildren(self.player)
         else:
             node.genChildren(util.opponent(self.player))
 
     def simulation(self, node):
-        print('simulation')
         if len(node.value.possibleMoves()) == 0:
             return False
         turn = node.nodeHeight() % 2
@@ -73,20 +67,16 @@ class MonteCarlo:
             turn += 1
             if node.value.end:
                 break
-        print(node.value.winner)
         if node.value.winner == self.def_player(self.player):
-            print(f'entrei sou vencedor {node.value.winner}')
             return True
         else: return False
 
     def backPropagation(self, node, won):
-        print('backpropagation')
         if node.parent == None:
             return
         else:
             node.parent.visit()
             if won:
-                print('backpropagation win')
                 node.parent.win()
             return self.backPropagation(node.parent, won)
         
@@ -107,8 +97,4 @@ class MonteCarlo:
                     won = True
                 self.backPropagation(node.getChild(child), won)
         best = self.bestMove(self.tree.root)
-                
-        print(self.tree)
-        # print("Best move:", best)
-        
         self.state.move(best, self.player)
