@@ -186,7 +186,7 @@ def algorithm_vs_algorithm(game):
             algorithms_move(game, game.algorithm1)
             
         elif game.turn == 2:
-            algorithms_vs_algorithms_move(game, game.algorithm2)
+            algorithms_move(game, game.algorithm2)
         pygame.time.delay(100)
         pygame.display.update()
 
@@ -198,54 +198,31 @@ import time
 import minimax
 import alphabeta
 
-def algorithms_vs_algorithms_move(game_board,algorithm):
-    if algorithm=="astar_h1":
-        h1_times=[]
-        start_time = time.time()
-        bot = astar_h1.AStarBot(game_board, 1)
-        bot.play()
-        end_time = time.time()
-        execution_time = end_time - start_time  # Calcula o tempo de execução
-        h1_times.append(execution_time)
-        
-    elif algorithm=="astar_h2":
-        h2_times=[]
-        start_time = time.time()
-        bot = astar_h2.AStarBot(game_board, 1)
-        bot.play()
-        end_time = time.time()
-        execution_time = end_time - start_time  # Calcula o tempo de execução
-        h2_times.append(execution_time)
-        
-    elif algorithm=="montecarlo":
-        mc_times=[]
-        start_time = time.time()
-        bot = mcts.MonteCarlo(game_board, 1)
-        bot.play()
-    elif algorithm=="minimax":
-        pass
+import astar_h1
+import montecarlo
+import astar_h2
+import time
+import minimax
+import alphabeta
     
-
-
-def algorithms_move(game_board,algorithm):
+def algorithms_move(game_board, algorithm):
     if algorithm=="astar_h1":
-        bot = astar_h1.AStarBot(game_board, 2)
+        bot = astar_h1.AStarBot(game_board, game_board.turn)
         bot.play()
     elif algorithm=="astar_h2":
-        bot = astar_h2.AStarBot(game_board, 2)
+        bot = astar_h2.AStarBot(game_board, game_board.turn)
         bot.play()
     elif algorithm=="montecarlo":
-        bot = mcts.MonteCarlo(game_board, 2)
+        bot = montecarlo.MonteCarlo(game_board, game_board.turn)
         bot.play()
     elif algorithm=="minimax":
-        bot = minimax.MinimaxBot(game_board)
+        bot = minimax.MinimaxBot(game_board, game_board.turn)
         bot.play()
     elif algorithm=="alphabeta":
         bot = alphabeta.AlphaBeta(game_board)
         bot.play()
     elif algorithm == None:
         game_board.move(int(input()), game_board.turn)
-  
 
 def main(game, algorithm1, algorithm2, GUI):
     game.algorithm1 = algorithm1
