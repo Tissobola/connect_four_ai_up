@@ -32,7 +32,6 @@ class MonteCarlo:
         bestMove = None
         for move in node.children:
             ucb1 = self.ucb1(node, move)
-            print(ucb1)
             if bestMove == None:
                 bestMove = (move, ucb1)
             else:

@@ -7,7 +7,6 @@ import mcts
 import time
 
 
-
 #-------------------------------- GAME --------------------------------
 game_board = board.Board()
 """ bot1 = astar_h1.AStarBot(game_board, 1)
@@ -43,7 +42,7 @@ import interface
 #interface.main(game_board, algorithm1='astar_h1', algorithm2=None, GUI= True)
 
 #player vs montecarlo
-interface.main(game_board, algorithm1='montecarlo', algorithm2=None, GUI= True)
+#interface.main(game_board, algorithm1='montecarlo', algorithm2=None, GUI= True)
 
 #player vs astar-professor 
 #interface.main(game_board, algorithm1='astar_h2', algorithm2=None, GUI= True)
