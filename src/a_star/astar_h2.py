@@ -1,6 +1,4 @@
-import tree
-import board
-import utils as util
+import src.common.tree as tree
 
 #h(n): minimize the chances of the opponent to win and maximize the chances of the bot to win
 #g(n): uniform cost search minimizes the cost of the path from the root to the current n
@@ -22,14 +20,12 @@ class AStarBot:
             f = self.f(movesTree.root.getChild(move))
             g = self.g()
             h = self.h(movesTree.root.getChild(move))
-            # print(move, ":", f, "=", h, "+", g)
             if bestMove == None:
                 if movesTree.root.children.__contains__(4):
                     bestMove = (4, self.f(movesTree.root.getChild(4)))
                 else:
                     bestMove = (move, f)
             if f < bestMove[1]:
-                # print("esse")
                 bestMove = (move, f)
         return bestMove[0]
 

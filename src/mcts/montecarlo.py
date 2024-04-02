@@ -1,8 +1,7 @@
 import random
-import board
 import numpy as np
-import utils as util
-import nodemc
+import src.common.utils as util
+import src.mcts.nodemc as nodemc
 
 
 class MonteCarlo:
@@ -26,7 +25,10 @@ class MonteCarlo:
     
     def selecting(self, node):
         while not node.possibleMoves:
-            node = self.bestMove(node) 
+            result = self.bestMove(node)
+            if result == None:
+                return None
+            node = result                
             
         return node
 
@@ -34,7 +36,10 @@ class MonteCarlo:
     def bestMove(self, node):
         # calcular o melhor ucb entre os nós filhos
         
-        best = max(self.ucb1(node, move) for move in node.children)
+        if len(node.children) != 0:
+            best = max(self.ucb1(node, move) for move in node.children)
+        else:
+            return None
 
         # lista com todos os nos que tem best como ucb
         best_nodes = []
@@ -95,18 +100,20 @@ class MonteCarlo:
         self.tree = nodemc.MCTree(self.state, self.player)      # tree based on the board object
         for _ in range(self.simulations):
             node = self.selection()
+            
+            if node == None:
+                best = self.bestMove(self.tree.root)
+                self.state.move(best.column, self.player)
+                return
+            
             expanded_node = self.expansion(node)
-
+            
             if expanded_node.value.winner != self.def_player(self.player):
                 tempNode = expanded_node.copy()
                 won = self.simulation(tempNode) # correta - true or false
             else:
                 won = True
             self.backPropagation(expanded_node, won)
-        
-        result = self.tree.__str__()
-        print(result)
 
         best = self.bestMove(self.tree.root)
-        print("best = ", best.column)
         self.state.move(best.column, self.player)

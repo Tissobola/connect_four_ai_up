@@ -1,8 +1,8 @@
 import random
-import board
+import common.board as board
 import numpy as np
-import utils as util
-import tree
+import common.utils as util
+import common.tree as tree
 
 class MonteCarlo:
     def __init__(self, state, player):

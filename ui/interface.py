@@ -4,7 +4,7 @@ with contextlib.redirect_stdout(None):
     import pygame
     import pygame.gfxdraw
     
-import board
+import src.common.board as board
 
 
 collumn_count = 7
@@ -148,22 +148,23 @@ def play_game(game):
     pygame.display.set_caption('Connect 4 - player vs ' + str(game.algorithm1))
 
     while not game.end:
-       
         draw_board(game, screen)
         event = pygame.event.wait()
         if event.type == pygame.QUIT:
             exit()
         if event.type == pygame.MOUSEMOTION:
             draw_hover_piece(screen, game.player(game.turn), pygame.mouse.get_pos()[0] // square_size,
-                             pygame.Surface((square_size, square_size), pygame.SRCALPHA))     
+                             pygame.Surface((square_size, square_size), pygame.SRCALPHA))
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             column = pos[0] // square_size
             if game.move(column + 1, game.turn):
                 if not game.end and game.algorithm1 is not None:
+                    draw_board(game, screen)
+                    pygame.display.update()
                     algorithms_move(game, game.algorithm1)
-
         pygame.display.update()
+        
     draw_board(game, screen)
     
 
@@ -175,35 +176,31 @@ def algorithm_vs_algorithm(game):
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Connect 4 - ' + str(game.algorithm1) + ' vs ' + str(game.algorithm2))
 
+    draw_board(game, screen)
+    pygame.display.update()
+    
     while True:
         draw_board(game, screen)
         event = pygame.event.wait()
         if event.type == pygame.QUIT:
             exit()
             
-        print(game.turn)
+        # print(game.turn)
         if game.turn == 1:
             algorithms_move(game, game.algorithm1)
-            
         elif game.turn == 2:
             algorithms_move(game, game.algorithm2)
+        
+        draw_board(game, screen)
         pygame.time.delay(100)
         pygame.display.update()
 
 
-import astar_h1
-import mcts
-import astar_h2
-import time
-import minimax
-import alphabeta
-
-import astar_h1
-import montecarlo
-import astar_h2
-import time
-import minimax
-import alphabeta
+import src.a_star.astar_h2 as astar_h2
+import src.a_star.astar_h1 as astar_h1
+import src.mcts.montecarlo as montecarlo
+import src.minimax.minimax as minimax
+import src.alphabeta.alphabeta as alphabeta
     
 def algorithms_move(game_board, algorithm):
     if algorithm=="astar_h1":
