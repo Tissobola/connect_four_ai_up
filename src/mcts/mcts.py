@@ -1,16 +1,24 @@
 import random
-import board
+import common.board as board
 import numpy as np
-import utils as util
-import tree
+import common.utils as util
+import common.tree as tree
 
 class MonteCarlo:
     def __init__(self, state, player):
         self.tree = tree.MCTree(state, player)      # tree based on the board object
         self.player = player    # 1 or 2
         self.state = state  # Board object
-        self.simulations = 100
+        self.simulations = 1000
+        self.backPropagationp1Symbol = 'X'
+        self.p2Symbol = 'O'
         self.c = np.sqrt(2)
+    
+    def def_player(self, player):
+        if player == 1:
+            return self.p1Symbol
+        elif player == 2:
+            return self.p2Symbol
     
     def selection(self):
         return self.selecting(self.tree.root)
@@ -58,7 +66,7 @@ class MonteCarlo:
             turn += 1
             if node.value.end:
                 break
-        if node.value.winner == self.player:
+        if node.value.winner == self.def_player(self.player):
             return True
         else: return False
 
@@ -79,7 +87,7 @@ class MonteCarlo:
             for child in node.children:
                 childNode = node.getChild(child)
                 childNode.visit()
-                if childNode.value.winner != self.player:
+                if childNode.value.winner != self.def_player(self.player):
                     tempNode = childNode.copy()
                     won = self.simulation(tempNode)
                     if won: childNode.win()
@@ -88,8 +96,4 @@ class MonteCarlo:
                     won = True
                 self.backPropagation(node.getChild(child), won)
         best = self.bestMove(self.tree.root)
-                
-        # print(self.tree)
-        # print("Best move:", best)
-        
         self.state.move(best, self.player)
